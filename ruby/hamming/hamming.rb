@@ -3,15 +3,16 @@ module BookKeeping
 end
 
 class Hamming
-  def self.compute(string_a, string_b)
-    raise ArgumentError, "Arguments length is not equal" if string_a.length != string_b.length
+  def self.compute(string1, string2)
+    raise ArgumentError, "Arguments length is not equal" unless
+      string1.length == string2.length
 
-    strand_a    = string_a.split("")
-    strand_b    = string_b.split("")
+    strand1     = string1.chars
+    strand2     = string2.chars
     differences = []
 
-    strand_a.each.with_index do |char_a, index_a|
-      differences << true unless char_a == strand_b[index_a]
+    strand1.each.with_index do |char1, index1|
+      differences << true unless char1 == strand2[index1]
     end
 
     differences.count
