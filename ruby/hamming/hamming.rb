@@ -4,7 +4,7 @@ end
 
 class Hamming
   def self.compute(string_a, string_b)
-    throw ArgumentError unless string_a.length == string_b.length
+    raise ArgumentError, "Arguments length is not equal" if string_a.length != string_b.length
 
     strand_a    = string_a.split("")
     strand_b    = string_b.split("")
