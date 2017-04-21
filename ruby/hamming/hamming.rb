@@ -1,20 +1,16 @@
-module BookKeeping
-  VERSION = 3
+class Hamming
+  def self.compute(strand1, strand2)
+    raise ArgumentError, "Arguments length is not equal" unless
+      strand1.length == strand2.length
+
+    strand1   = strand1.chars
+    strand2   = strand2.chars
+    different = proc { |char1, char2| true unless char1 == char2 }
+
+    strand1.zip(strand2).count(&different)
+  end
 end
 
-class Hamming
-  def self.compute(string1, string2)
-    raise ArgumentError, "Arguments length is not equal" unless
-      string1.length == string2.length
-
-    strand1     = string1.chars
-    strand2     = string2.chars
-    differences = []
-
-    strand1.each.with_index do |char1, index1|
-      differences << true unless char1 == strand2[index1]
-    end
-
-    differences.count
-  end
+module BookKeeping
+  VERSION = 3
 end
