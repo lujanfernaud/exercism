@@ -1,10 +1,11 @@
 class Complement
   def self.of_dna(nucleotide)
-    case nucleotide
-    when "G" then "C"
-    when "C" then "G"
-    when "T" then "A"
-    when "A" then "U"
-    end
+    return "" if nucleotide =~ /[^GCTAU]/
+    complements = { "G" => "C", "C" => "G", "T" => "A", "A" => "U" }
+    nucleotide.gsub(/\w/) { |n| complements[n] }
   end
+end
+
+module BookKeeping
+  VERSION = 4
 end
