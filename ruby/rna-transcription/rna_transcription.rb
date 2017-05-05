@@ -4,9 +4,9 @@ class Complement
                   "T" => "A",
                   "A" => "U" }.freeze
 
-  def self.of_dna(nucleotide)
-    return "" if nucleotide =~ /[^GCTAU]/
-    nucleotide.gsub(/\w/) { |n| COMPLEMENTS[n] }
+  def self.of_dna(strand)
+    return "" if strand =~ /[^GCTAU]/
+    strand.gsub(/\w/) { |n| COMPLEMENTS[n] }
   end
 end
 
