@@ -1,12 +1,12 @@
 class Complement
-  COMPLEMENTS = { "G" => "C",
-                  "C" => "G",
-                  "T" => "A",
-                  "A" => "U" }.freeze
+  RNA_TO_DNA = { "G" => "C",
+                 "C" => "G",
+                 "T" => "A",
+                 "A" => "U" }.freeze
 
   def self.of_dna(strand)
     return "" if strand =~ /[^GCTAU]/
-    strand.gsub(/\w/) { |n| COMPLEMENTS[n] }
+    strand.gsub(/\w/) { |nucleotide| RNA_TO_DNA[nucleotide] }
   end
 end
 
