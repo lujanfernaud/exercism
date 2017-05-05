@@ -1,8 +1,12 @@
 class Complement
+  COMPLEMENTS = { "G" => "C",
+                  "C" => "G",
+                  "T" => "A",
+                  "A" => "U" }.freeze
+
   def self.of_dna(nucleotide)
     return "" if nucleotide =~ /[^GCTAU]/
-    complements = { "G" => "C", "C" => "G", "T" => "A", "A" => "U" }
-    nucleotide.gsub(/\w/) { |n| complements[n] }
+    nucleotide.gsub(/\w/) { |n| COMPLEMENTS[n] }
   end
 end
 
