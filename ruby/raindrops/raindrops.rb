@@ -13,3 +13,7 @@ class Raindrops
     result.empty? ? number.to_s : result
   end
 end
+
+module BookKeeping
+  VERSION = 3
+end
