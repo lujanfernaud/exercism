@@ -1,5 +1,5 @@
 class Pangram
-  ALPHABET = ("a".."z").to_a.freeze
+  ALPHABET = ("a".."z").to_a
 
   def self.pangram?(sentence)
     ALPHABET.all? { |char| sentence.downcase.include?(char) }
