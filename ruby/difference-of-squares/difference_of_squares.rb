@@ -1,18 +1,15 @@
 class Squares
-  attr_reader :number, :numbers
+  attr_reader :numbers
 
-  def initialize(number)
-    @number  = number
-    @numbers = (1..number).to_a
+  def initialize(max_number)
+    @numbers = 0.upto(max_number)
   end
 
   def square_of_sum
-    return 0 if number.zero?
     numbers.inject(:+)**2
   end
 
   def sum_of_squares
-    return 0 if number.zero?
     numbers.map { |n| n**2 }.inject(:+)
   end
 
