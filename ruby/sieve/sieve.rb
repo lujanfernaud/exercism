@@ -1,12 +1,12 @@
 class Sieve
   def initialize(max_number)
     @max_number = max_number
-    @numbers    = (2..max_number).to_a
+    @numbers    = [*2..max_number]
     @multiples  = []
+    find_multiples
   end
 
   def primes
-    find_multiples
     @numbers - @multiples
   end
 
