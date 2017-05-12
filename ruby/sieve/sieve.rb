@@ -6,8 +6,11 @@ class Sieve
   end
 
   def primes
-    return @multiples if @max_number < 2
+    find_multiples
+    @numbers - @multiples
+  end
 
+  def find_multiples
     2.upto(@max_number - 1) do |number1|
       next if @multiples.include?(number1)
 
@@ -17,8 +20,6 @@ class Sieve
         @multiples << multiple unless @multiples.include?(multiple)
       end
     end
-
-    @numbers - @multiples
   end
 end
 
