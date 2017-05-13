@@ -20,20 +20,20 @@ class RobotTest < Minitest::Test
   end
 
   def test_name_sticks
-    skip
+    # skip
     robot = Robot.new
     robot.name
     assert_equal robot.name, robot.name
   end
 
   def test_different_robots_have_different_names
-    skip
+    # skip
     Kernel.srand DIFFERENT_ROBOT_NAME_SEED
     refute_equal Robot.new.name, Robot.new.name
   end
 
   def test_reset_name
-    skip
+    # skip
     Kernel.srand DIFFERENT_ROBOT_NAME_SEED
     robot = Robot.new
     name = robot.name
@@ -45,7 +45,7 @@ class RobotTest < Minitest::Test
   end
 
   def test_different_name_when_chosen_name_is_taken
-    skip
+    # skip
     Kernel.srand SAME_INITIAL_ROBOT_NAME_SEED
     name1 = Robot.new.name
     Kernel.srand SAME_INITIAL_ROBOT_NAME_SEED
@@ -54,7 +54,7 @@ class RobotTest < Minitest::Test
   end
 
   def test_version
-    skip
+    # skip
     assert_equal 2, BookKeeping::VERSION
   end
 end
