@@ -5,11 +5,11 @@ module Grains
     raise ArgumentError, "Number not valid" unless
       VALID_NUMBERS.include?(number)
 
-    [*1..number].inject { |num| num * 2 }
+    2**number / 2
   end
 
   def self.total
-    VALID_NUMBERS.inject { |num| num * 2 } * 2 - 1
+    2**64 - 1
   end
 end
 
