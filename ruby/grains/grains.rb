@@ -1,9 +1,6 @@
 module Grains
-  VALID_NUMBERS = [*1..64]
-
   def self.square(number)
-    raise ArgumentError, "Number not valid" unless
-      VALID_NUMBERS.include?(number)
+    raise ArgumentError, "Number not valid" unless (1..64).cover?(number)
 
     2**number / 2
   end
