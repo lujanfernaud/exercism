@@ -1,12 +1,25 @@
-module Grains
-  def self.square(number)
-    raise ArgumentError, "Number not valid" unless (1..64).cover?(number)
+class Grains
+  class << self
+    CHESSBOARD = (1..64)
+    CHESSBOARD_SQUARES = 64
+    GRAINS_MULTIPLIER = 2
+    OFFSET = 1
 
-    2**number / 2
-  end
+    def on_square(square_number)
+      not_a_chessboard_square unless CHESSBOARD.cover?(square_number)
 
-  def self.total
-    2**64 - 1
+      GRAINS_MULTIPLIER**(square_number - OFFSET)
+    end
+
+    def total
+      GRAINS_MULTIPLIER**CHESSBOARD_SQUARES - OFFSET
+    end
+
+    def not_a_chessboard_square
+      raise ArgumentError, "Square number must be between 1 and 64"
+    end
+
+    alias square on_square
   end
 end
 
