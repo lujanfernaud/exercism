@@ -16,17 +16,11 @@ class Bob
     end
 
     def asking?(remark)
-      return false if remark =~ /\?\n/
-
-      remark =~ /\?\s*?$/
+      remark.strip.end_with?("?")
     end
 
     def silence?(remark)
-      numbers = remark.scan(/[1-9]/)
-      letters = remark.scan(/[^1-9|\W]/)
-      spaces  = remark.scan(/\s+/)
-
-      numbers.empty? && letters.empty? && spaces
+      remark.strip.empty?
     end
   end
 end
