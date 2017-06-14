@@ -1,26 +1,29 @@
 class Bob
   class << self
     def hey(remark)
-      return "Whoa, chill out!"   if yelling?(remark)
-      return "Sure."              if asking?(remark)
-      return "Fine. Be that way!" if silence?(remark)
-
-      "Whatever."
+      case remark.strip
+      when yelling? then "Whoa, chill out!"
+      when asking?  then "Sure."
+      when silence? then "Fine. Be that way!"
+      else "Whatever."
+      end
     end
 
-    def yelling?(remark)
-      letters = remark.scan(/[^1-9|\W]/)
-      return false if letters.empty?
+    def yelling?
+      lambda do |remark|
+        letters = remark.scan(/[^1-9|\W]/)
+        return false if letters.empty?
 
-      letters.all? { |letter| letter == letter.upcase }
+        letters.all? { |letter| letter == letter.upcase }
+      end
     end
 
-    def asking?(remark)
-      remark.strip.end_with?("?")
+    def asking?
+      ->(remark) { remark.end_with?("?") }
     end
 
-    def silence?(remark)
-      remark.strip.empty?
+    def silence?
+      ->(remark) { remark.empty? }
     end
   end
 end
