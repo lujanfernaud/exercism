@@ -13,10 +13,10 @@ class Bob
 
     def yelling?
       lambda do |remark|
-        letters = remark.scan(/[^1-9|\W]/)
+        letters = remark.scan(/[^1-9|\W]/).join
         return false if letters.empty?
 
-        letters.all? { |letter| letter == letter.upcase }
+        letters == letters.upcase
       end
     end
 
