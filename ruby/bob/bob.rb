@@ -9,6 +9,8 @@ class Bob
       end
     end
 
+    private
+
     def yelling?
       lambda do |remark|
         letters = remark.scan(/[^1-9|\W]/)
