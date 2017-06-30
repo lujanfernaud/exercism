@@ -16,7 +16,7 @@ class Binary
     end
 
     def parse_and_reverse(binary)
-      binary.each_char.map { |number| number.to_i }.reverse
+      binary.each_char.map(&:to_i).reverse
     end
 
     def powers_for_each(binary)
