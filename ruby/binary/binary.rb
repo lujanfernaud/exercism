@@ -7,8 +7,6 @@ class Binary
       raise ArgumentError, "#{binary} is not a correct binary number" if
         binary =~ NOT_BINARY
 
-      return 0 if binary.to_i.zero?
-
       binary = parse_and_reverse(binary)
       powers = powers_for_each(binary)
 
@@ -16,7 +14,7 @@ class Binary
     end
 
     def parse_and_reverse(binary)
-      binary.each_char.map(&:to_i).reverse
+      binary.chars.map(&:to_i).reverse
     end
 
     def powers_for_each(binary)
