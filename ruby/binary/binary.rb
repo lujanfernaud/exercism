@@ -1,11 +1,11 @@
 # Convert a binary number to its decimal equivalent.
 class Binary
-  NOT_BINARY = /[^0-1]/
+  BINARY = /\A[0-1]+\z/
 
   class << self
     def to_decimal(binary)
-      raise ArgumentError, "#{binary} is not a correct binary number" if
-        binary =~ NOT_BINARY
+      raise ArgumentError, "#{binary} is not a correct binary number" unless
+        binary.match(BINARY)
 
       binary = parse_and_reverse(binary)
       powers = powers_for_each(binary)
