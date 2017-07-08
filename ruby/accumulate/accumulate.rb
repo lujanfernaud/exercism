@@ -1,6 +1,6 @@
 class Array
   def accumulate
-    return to_enum unless block_given?
+    return enum_for(:accumulate) unless block_given?
 
     accumulator = []
     each { |value| accumulator << yield(value) }
