@@ -2,9 +2,7 @@ class Array
   def accumulate
     return enum_for(:accumulate) unless block_given?
 
-    accumulator = []
-    each { |value| accumulator << yield(value) }
-    accumulator
+    inject [] { |accumulator, value| accumulator << yield(value) }
   end
 end
 
