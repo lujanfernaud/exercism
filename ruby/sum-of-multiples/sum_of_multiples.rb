@@ -1,8 +1,6 @@
-# Find the sum of all the multiples of particular numbers up to
-# but not including that number.
 class SumOfMultiples
-  def initialize(*args)
-    @multiples_of = args
+  def initialize(*multiples_of)
+    @multiples_of = multiples_of
   end
 
   def to(maximum)
