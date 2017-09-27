@@ -24,7 +24,7 @@ class School
   end
 
   def grade
-    @students.select { |group| group[:grade] == @grade }.first || {}
+    students_by_grade.find { |group| group[:grade] == @grade } || {}
   end
 
   def add_name_to_grade(name)
