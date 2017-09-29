@@ -12,8 +12,13 @@ class School
   end
 
   def students_by_grade
-    @students.sort
-             .map { |grade, students| { grade: grade, students: students } }
+    @students.sort.map(&by_grade)
+  end
+
+  private
+
+  def by_grade
+    proc { |grade, students| { grade: grade, students: students } }
   end
 end
 
