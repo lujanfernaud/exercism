@@ -1,12 +1,12 @@
 class Series
-  def initialize(digits_string)
-    @digits_string = digits_string.split("")
+  def initialize(digits)
+    @digits = digits.split("")
   end
 
   def slices(slice_length)
     raise ArgumentError, "Slice length can't be bigger than string length." if
-      slice_length > @digits_string.length
+      slice_length > @digits.length
 
-    @digits_string.each_cons(slice_length).map(&:join)
+    @digits.each_cons(slice_length).map(&:join)
   end
 end
