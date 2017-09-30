@@ -7,6 +7,6 @@ class Series
     raise ArgumentError, "Slice length can't be bigger than string length." if
       slice_length > @digits_string.length
 
-    @digits_string.each_cons(slice_length).map { |substring| substring.join }
+    @digits_string.each_cons(slice_length).map(&:join)
   end
 end
