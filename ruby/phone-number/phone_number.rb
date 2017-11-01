@@ -4,9 +4,7 @@ class PhoneNumber
   def self.clean(number)
     numbers = number.gsub(/\D/, "").sub(/^1/, "")
 
-    return nil unless numbers =~ VALID_PHONE_NUMBER
-
-    numbers
+    numbers[VALID_PHONE_NUMBER]
   end
 end
 
