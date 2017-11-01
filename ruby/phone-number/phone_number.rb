@@ -3,7 +3,6 @@ class PhoneNumber
 
   def self.clean(number)
     numbers = number.gsub(/\D/, "").sub(/^1/, "")
-
     numbers[VALID_PHONE_NUMBER]
   end
 end
