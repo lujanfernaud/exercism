@@ -1,10 +1,6 @@
 var TwoFer = function () {};
 
-TwoFer.prototype.twoFer = function (who) {
-  if (who === undefined) {
-    who = "you"
-  }
-
+TwoFer.prototype.twoFer = function (who = "you") {
   return `One for ${who}, one for me.`;
 };
 
