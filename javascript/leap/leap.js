@@ -3,11 +3,9 @@ var Year = function (input) {
 };
 
 Year.prototype.isLeap = function () {
-  if (this.input % 4 == 0 && this.input % 400 == 0) {
+  if (this.input % 400 == 0) {
     return true;
-  } else if (this.input % 100 == 0) {
-    return false;
-  } else if (this.input % 4 == 0) {
+  } else if (this.input % 4 == 0 && this.input % 100 != 0) {
     return true;
   } else {
     return false;
