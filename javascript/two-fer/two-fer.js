@@ -1,7 +1,7 @@
 var TwoFer = function () {};
 
 TwoFer.prototype.twoFer = function (who) {
-  if (who == undefined) {
+  if (who === undefined) {
     who = "you"
   }
 
