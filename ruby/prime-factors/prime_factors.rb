@@ -9,7 +9,7 @@ class PrimeFactors
 
     [].tap do |prime_factors|
       divisors.each do |divisor|
-        next unless self.is_prime?(divisor)
+        next unless is_prime?(divisor)
 
         result = number.to_f / divisor
 
