@@ -3,35 +3,27 @@
 
 class PrimeFactors
   def self.for(number)
-    new(number).find_prime_factors
-  end
+    return [] if number == 1
 
-  def initialize(number)
-    @number        = number
-    @divisors      = [*2..number]
-    @prime_factors = []
-  end
+    divisors = [*2..number]
 
-  def find_prime_factors
-    return [] if @number == 1
+    [].tap do |prime_factors|
+      divisors.each do |divisor|
+        next unless self.is_prime?(divisor)
 
-    @divisors.each do |divisor|
-      next unless is_prime?(divisor)
+        result = number.to_f / divisor
 
-      @result = @number.to_f / divisor
+        while (result % 1).zero?
+          prime_factors << divisor
+          result /= divisor
+        end
 
-      while (@result % 1).zero?
-        @prime_factors << divisor
-        @result /= divisor
+        break if result < 1.0
       end
-
-      break if @result < 1.0
     end
-
-    @prime_factors
   end
 
-  def is_prime?(number)
+  def self.is_prime?(number)
     max = Math.sqrt(number)
 
     [*2..max].none? { |n| (number % n).zero? }
