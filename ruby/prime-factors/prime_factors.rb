@@ -1,31 +1,20 @@
-# I'm not a big fan of math problems.
-# This solution is very slow for the last two test cases, but works.
+require "prime"
 
 class PrimeFactors
   def self.for(number)
     return [] if number == 1
 
-    divisors = [*2..number]
+    prime_numbers = Prime.each(number)
 
     [].tap do |prime_factors|
-      divisors.each do |divisor|
-        next unless is_prime?(divisor)
-
-        result = number.to_f / divisor
+      prime_numbers.each do |prime_number|
+        result = number.to_f / prime_number
 
         while (result % 1).zero?
-          prime_factors << divisor
-          result /= divisor
+          prime_factors << prime_number
+          result /= prime_number
         end
-
-        break if result < 1.0
       end
     end
-  end
-
-  def self.is_prime?(number)
-    max = Math.sqrt(number)
-
-    [*2..max].none? { |n| (number % n).zero? }
   end
 end
