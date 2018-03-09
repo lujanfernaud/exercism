@@ -6,6 +6,6 @@ module Enumerable
   end
 
   def discard
-    keep { |element| !yield element }
+    keep { |item| !yield item }
   end
 end
