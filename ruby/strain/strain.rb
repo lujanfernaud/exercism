@@ -1,13 +1,11 @@
 module Enumerable
   def keep
-    [].tap do |array|
-      to_a.each { |element| array << element if yield(element) }
-    end
+    return to_enum unless block_given?
+
+    to_a.each_with_object [] { |item, array| array << item if yield item }
   end
 
   def discard
-    [].tap do |array|
-      to_a.each { |element| array << element unless yield(element) }
-    end
+    keep { |element| !yield element }
   end
 end
