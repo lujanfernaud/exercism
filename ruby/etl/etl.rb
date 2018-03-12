@@ -1,10 +1,8 @@
 class ETL
   def self.transform(letters)
-    {}.tap do |hash|
-      letters.each do |key, value|
-        value.each do |v|
-          hash[v.downcase] = key
-        end
+    letters.each_with_object({}) do |(key, value), hash|
+      value.each do |item|
+        hash[item.downcase] = key
       end
     end
   end
