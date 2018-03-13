@@ -19,9 +19,9 @@ class Trinary
   end
 
   def convert_to_decimal
-    @trinary.reverse.map.with_index do |number, index|
+    @trinary.reverse.map.with_index.sum do |number, index|
       number * 3**index
-    end.sum
+    end
   end
 end
 
