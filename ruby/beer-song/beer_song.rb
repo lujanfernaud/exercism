@@ -1,12 +1,20 @@
 class BeerSong
   def verse(number)
-    @number = number
-
-    number > 0 ? verse_with_bottles : verse_without_bottles
+    Verse.new(number).build
   end
 
   def verses(initial, final)
     initial.downto(final).to_a.map { |number| verse(number) }.join("\n")
+  end
+end
+
+class Verse
+  def initialize(number)
+    @number = number
+  end
+
+  def build
+    @number > 0 ? verse_with_bottles : verse_without_bottles
   end
 
   private
