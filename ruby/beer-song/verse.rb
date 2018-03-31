@@ -24,7 +24,7 @@ class Verse
   end
 
   def quantity(number = @number)
-    number == 0 ? "no more" : number
+    number == 0 ? "no more" : number.to_s
   end
 
   def containers(number = @number)
