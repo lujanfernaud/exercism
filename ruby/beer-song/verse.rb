@@ -11,31 +11,43 @@ class Verse
 
   def verse_with_bottles
     <<~VERSE
-      #{quantity} #{containers} of beer on the wall, #{quantity} #{containers} of beer.
-      Take #{pronoun} down and pass it around, #{quantity minus_one} #{containers minus_one} of beer on the wall.
+      #{containers_of_beverage} on the wall, #{containers_of_beverage}.
+      #{action}, #{containers_of_beverage minus_one} on the wall.
     VERSE
   end
 
   def verse_without_bottles
     <<~VERSE
-      #{quantity.capitalize} #{containers} of beer on the wall, #{quantity} #{containers} of beer.
-      Go to the store and buy some more, 99 bottles of beer on the wall.
+      #{containers_of_beverage.capitalize} on the wall, #{containers_of_beverage}.
+      #{action}, #{containers_of_beverage(99)} on the wall.
     VERSE
   end
 
-  def quantity(number = @number)
+  def containers_of_beverage(number = @number)
+    "#{quantity(number)} #{containers(number)} of beer"
+  end
+
+  def quantity(number)
     number == 0 ? "no more" : number.to_s
   end
 
-  def containers(number = @number)
+  def containers(number)
     number == 1 ? "bottle" : "bottles"
-  end
-
-  def pronoun(number = @number)
-    number == 1 ? "it" : "one"
   end
 
   def minus_one
     @number - 1
+  end
+
+  def action(number = @number)
+    if number == 0
+      "Go to the store and buy some more"
+    else
+      "Take #{pronoun} down and pass it around"
+    end
+  end
+
+  def pronoun(number = @number)
+    number == 1 ? "it" : "one"
   end
 end
