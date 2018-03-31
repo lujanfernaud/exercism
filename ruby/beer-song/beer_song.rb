@@ -1,13 +1,15 @@
 class BeerSong
   def verse(number)
-    if number > 0
+    @number = number
+
+    if @number > 0
       <<~VERSE
-      #{bottles(number)} of beer on the wall, #{bottles(number)} of beer.
-      #{take(number)} down and pass it around, #{bottles(number - 1)} of beer on the wall.
+      #{bottles} of beer on the wall, #{bottles} of beer.
+      #{take_some} down and pass it around, #{bottles &minus_one} of beer on the wall.
       VERSE
     else
       <<~VERSE
-      #{bottles(number).capitalize} of beer on the wall, #{bottles(number)} of beer.
+      #{bottles.capitalize} of beer on the wall, #{bottles} of beer.
       Go to the store and buy some more, 99 bottles of beer on the wall.
       VERSE
     end
@@ -19,16 +21,22 @@ class BeerSong
 
   private
 
-  def bottles(number)
-    case number
-    when 2..99 then "#{number} bottles"
-    when 1     then "#{number} bottle"
+  def bottles
+    block_given? ? @number = yield(@number) : @number
+
+    case @number
+    when 2..99 then "#{@number} bottles"
+    when 1     then "#{@number} bottle"
     when 0     then "no more bottles"
     end
   end
 
-  def take(number)
-    case number
+  def minus_one
+    proc { |number| number - 1 }
+  end
+
+  def take_some
+    case @number
     when 2..99 then "Take one"
     when 1     then "Take it"
     end
