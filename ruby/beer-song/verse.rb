@@ -11,36 +11,36 @@ class Verse
 
   def verse_with_bottles
     <<~VERSE
-      #{bottles} of beer on the wall, #{bottles} of beer.
-      #{take_some} down and pass it around, #{bottles &minus_one} of beer on the wall.
+      #{number} #{containers} of beer on the wall, #{number} #{containers} of beer.
+      Take #{pronoun} down and pass it around, #{number &minus_one} #{containers} of beer on the wall.
     VERSE
   end
 
   def verse_without_bottles
     <<~VERSE
-      #{bottles.capitalize} of beer on the wall, #{bottles} of beer.
+      #{number.capitalize} #{containers} of beer on the wall, #{number} #{containers} of beer.
       Go to the store and buy some more, 99 bottles of beer on the wall.
     VERSE
   end
 
-  def bottles
+  def number
     @number = yield(@number) if block_given?
 
-    case @number
-    when 2..99 then "#{@number} bottles"
-    when 1     then "1 bottle"
-    when 0     then "no more bottles"
-    end
+    @number == 0 ? "no more" : @number
   end
 
   def minus_one
     proc { |number| number - 1 }
   end
 
-  def take_some
+  def containers
+    @number == 1 ? "bottle" : "bottles"
+  end
+
+  def pronoun
     case @number
-    when 2..99 then "Take one"
-    when 1     then "Take it"
+    when 2..99 then "one"
+    when 1     then "it"
     end
   end
 end
