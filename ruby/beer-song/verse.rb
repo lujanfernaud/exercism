@@ -31,11 +31,8 @@ class Verse
     number == 1 ? "bottle" : "bottles"
   end
 
-  def pronoun
-    case @number
-    when 2..99 then "one"
-    when 1     then "it"
-    end
+  def pronoun(number = @number)
+    number == 1 ? "it" : "one"
   end
 
   def minus_one
