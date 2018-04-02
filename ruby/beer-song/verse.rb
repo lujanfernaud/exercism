@@ -1,3 +1,5 @@
+require "./bottle_number"
+
 class Verse
   def initialize(number)
     @number = number
@@ -17,35 +19,15 @@ class Verse
   end
 
   def quantity(number)
-    if number == 0
-      "no more"
-    else
-      number.to_s
-    end
+    BottleNumber.new(number).quantity
   end
 
   def containers(number)
-    if number == 1
-      "bottle"
-    else
-      "bottles"
-    end
+    BottleNumber.new(number).containers
   end
 
   def action
-    if @number == 0
-      "Go to the store and buy some more"
-    else
-      "Take #{pronoun} down and pass it around"
-    end
-  end
-
-  def pronoun
-    if @number == 1
-      "it"
-    else
-      "one"
-    end
+    BottleNumber.new(@number).action
   end
 
   def successor
