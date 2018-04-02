@@ -6,7 +6,7 @@ class Verse
   def build
     <<~VERSE
       #{containers_of_beverage.capitalize} on the wall, #{containers_of_beverage}.
-      #{action}, #{containers_of_beverage minus_one} on the wall.
+      #{action}, #{containers_of_beverage successor} on the wall.
     VERSE
   end
 
@@ -19,8 +19,6 @@ class Verse
   def quantity(number)
     if number == 0
       "no more"
-    elsif number == -1
-      "99"
     else
       number.to_s
     end
@@ -50,7 +48,11 @@ class Verse
     end
   end
 
-  def minus_one
-    @number - 1
+  def successor
+    if @number == 0
+      99
+    else
+      @number - 1
+    end
   end
 end
