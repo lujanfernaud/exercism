@@ -13,9 +13,7 @@ class Transcriptor {
 
     const dnaStrand = strand.split('');
 
-    function toRna(nucleotide) { return dnaToRna[nucleotide]; }
-
-    return dnaStrand.map(toRna).join('');
+    return dnaStrand.map(nucleotide => dnaToRna[nucleotide]).join('');
   }
 }
 
