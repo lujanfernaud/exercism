@@ -1,4 +1,6 @@
 php/
+javacript/**/node_modules/
+ecmascript/**/node_modules/
 
 **/**/.solution.json
 **/**/.jshintrc
