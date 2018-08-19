@@ -8,12 +8,14 @@ const dnaToRna = {
 };
 
 class Transcriptor {
-  toRna(strand) {
-    if (strand.match(notDna)) { throw new Error('Invalid input DNA.'); }
+  toRna([...strand]) {
+    if (this.isNotADna(strand)) { throw new Error('Invalid input DNA.'); }
 
-    const dnaStrand = strand.split('');
+    return strand.map(nucleotide => dnaToRna[nucleotide]).join('');
+  }
 
-    return dnaStrand.map(nucleotide => dnaToRna[nucleotide]).join('');
+  isNotADna(strand) {
+    return strand.join('').match(notDna);
   }
 }
 
