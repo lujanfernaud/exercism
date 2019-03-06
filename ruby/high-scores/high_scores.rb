@@ -14,12 +14,6 @@ class HighScores
   end
 
   def personal_top_three
-    scores.sort(&desc).first(3)
-  end
-
-  private
-
-  def desc
-    proc { |a, b| b <=> a }
+    scores.max(3)
   end
 end
