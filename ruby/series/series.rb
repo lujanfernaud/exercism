@@ -1,6 +1,6 @@
 class Series
   def initialize(digits)
-    @digits = digits.split("")
+    @digits = digits.chars
   end
 
   def slices(slice_length)
