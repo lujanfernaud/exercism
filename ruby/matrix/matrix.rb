@@ -1,10 +1,10 @@
 class Matrix
   def initialize(matrix)
-    @matrix = matrix
+    @matrix = matrix.split("\n")
   end
 
   def rows
-    @rows ||= matrix.split("\n").map { |item| item.split.map(&:to_i) }
+    @rows ||= matrix.map(&individual_rows)
   end
 
   def columns
@@ -16,6 +16,10 @@ class Matrix
   end
 
   private
+
+  def individual_rows
+    proc { |item| item.split.map(&:to_i) }
+  end
 
   def columns_number
     rows.map(&:length).max
