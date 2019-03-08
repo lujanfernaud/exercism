@@ -4,7 +4,7 @@ class Matrix
   end
 
   def rows
-    @rows ||= matrix.map(&individual_rows)
+    @rows ||= matrix.map(&method(:individual_rows))
   end
 
   def columns
@@ -13,8 +13,8 @@ class Matrix
 
   private
 
-  def individual_rows
-    proc { |item| item.split.map(&:to_i) }
+  def individual_rows(item)
+    item.split.map(&:to_i)
   end
 
   attr_reader :matrix
