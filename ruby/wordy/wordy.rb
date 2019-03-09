@@ -8,19 +8,16 @@ class WordProblem
   def answer
     raise ArgumentError, "Unknown operation" if operation_is_not_valid?
 
-    parse_operation
+    evaluate
   end
 
   private
 
   def operation_is_not_valid?
-    # Find a better way to do this.
-    @question = question.join(" ") if question.class == Array
-
     !question.match(VALID_OPERATION)
   end
 
-  def parse_operation
+  def evaluate
     values = QuestionParser.run(question)
 
     OperationEvaluator.run(values)
