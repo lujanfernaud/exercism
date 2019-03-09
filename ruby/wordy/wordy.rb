@@ -23,7 +23,7 @@ class WordProblem
   def parse_operation
     values = QuestionParser.run(question)
 
-    ValuesParser.run(values)
+    OperationEvaluator.run(values)
   end
 
   attr_reader :question
@@ -70,9 +70,9 @@ class QuestionParser
   attr_reader :question
 end
 
-class ValuesParser
+class OperationEvaluator
   def self.run(values)
-    new(values).parse
+    new(values).evaluate
   end
 
   def initialize(values)
@@ -80,7 +80,7 @@ class ValuesParser
     @result = 0
   end
 
-  def parse
+  def evaluate
     while !values.empty? do
       first_number, operand, second_number = values.slice!(0..2)
 
