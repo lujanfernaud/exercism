@@ -1,5 +1,3 @@
-require "pry"
-
 OPERATORS = {
   "plus"       => "+",
   "minus"      => "-",
@@ -17,24 +15,23 @@ class WordProblem
   def answer
     raise ArgumentError, "Unknown operation" if operation_is_not_valid?
 
-    parse
+    parse_result
   end
 
   private
 
   def operation_is_not_valid?
+    # Find a better way to do this.
+    @question = @question.join(" ") if @question.class == Array
+
     !@question.match(/\d.+?\d/)
   end
 
-  def parse
-    @question = @question.sub("What is ", "").gsub("by", "").sub("?", "")
-    @question = @question.split(" ")
-
-    parse_values
+  def parse_result
+    parse_question_to_values
 
     while !@values.empty? do
-      v = @values.slice!(0..2)
-      first_number, operand, second_number = v
+      first_number, operand, second_number = @values.slice!(0..2)
 
       if second_number
         @result = first_number.send(operand, second_number)
@@ -44,6 +41,16 @@ class WordProblem
     end
 
     @result
+  end
+
+  def parse_question_to_values
+    prepare_question
+    parse_values
+  end
+
+  def prepare_question
+    @question = @question.sub("What is ", "").gsub("by", "").sub("?", "")
+    @question = @question.split(" ")
   end
 
   def parse_values
@@ -57,6 +64,3 @@ class WordProblem
   end
 end
 
-module BookKeeping
-  VERSION = 1
-end
