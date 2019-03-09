@@ -1,3 +1,5 @@
+require "pry"
+
 OPERATORS = {
   "plus"       => "+",
   "minus"      => "-",
@@ -15,7 +17,7 @@ class WordProblem
   def answer
     raise ArgumentError, "Unknown operation" if operation_is_not_valid?
 
-    parse_result
+    parse_operation
   end
 
   private
@@ -27,7 +29,7 @@ class WordProblem
     !@question.match(/\d.+?\d/)
   end
 
-  def parse_result
+  def parse_operation
     parse_question_to_values
 
     while !@values.empty? do
