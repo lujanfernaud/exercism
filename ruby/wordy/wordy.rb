@@ -1,16 +1,8 @@
 class WordProblem
   VALID_OPERATION = /\d.+?\d/
 
-  OPERATORS = {
-    "plus"       => "+",
-    "minus"      => "-",
-    "multiplied" => "*",
-    "divided"    => "/"
-  }.freeze
-
   def initialize(question)
     @question = question
-    @values   = []
     @result   = 0
   end
 
@@ -30,7 +22,7 @@ class WordProblem
   end
 
   def parse_operation
-    parse_question_to_values
+    values = QuestionParser.run(question)
 
     while !values.empty? do
       first_number, operand, second_number = values.slice!(0..2)
@@ -45,18 +37,39 @@ class WordProblem
     result
   end
 
-  def parse_question_to_values
-    parse_question
+  attr_reader :question, :result
+end
+
+class QuestionParser
+  OPERATORS = {
+    "plus"       => "+",
+    "minus"      => "-",
+    "multiplied" => "*",
+    "divided"    => "/"
+  }.freeze
+
+  def self.run(question)
+    new(question).parse
+  end
+
+  def initialize(question)
+    @question = question
+  end
+
+  def parse
+    prepare_question
     parse_values
   end
 
-  def parse_question
+  private
+
+  def prepare_question
     @question = question.sub("What is ", "").gsub("by", "").sub("?", "")
     @question = question.split(" ")
   end
 
   def parse_values
-    @values = question.map do |value|
+    question.map do |value|
       if OPERATORS.include?(value)
         OPERATORS[value].to_sym
       else
@@ -65,6 +78,5 @@ class WordProblem
     end
   end
 
-  attr_reader :question, :values, :result
+  attr_reader :question
 end
-
