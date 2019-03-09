@@ -1,13 +1,13 @@
-require "pry"
-
-OPERATORS = {
-  "plus"       => "+",
-  "minus"      => "-",
-  "multiplied" => "*",
-  "divided"    => "/"
-}.freeze
-
 class WordProblem
+  VALID_OPERATION = /\d.+?\d/
+
+  OPERATORS = {
+    "plus"       => "+",
+    "minus"      => "-",
+    "multiplied" => "*",
+    "divided"    => "/"
+  }.freeze
+
   def initialize(question)
     @question = question
     @values   = []
@@ -24,39 +24,39 @@ class WordProblem
 
   def operation_is_not_valid?
     # Find a better way to do this.
-    @question = @question.join(" ") if @question.class == Array
+    @question = question.join(" ") if question.class == Array
 
-    !@question.match(/\d.+?\d/)
+    !question.match(VALID_OPERATION)
   end
 
   def parse_operation
     parse_question_to_values
 
-    while !@values.empty? do
-      first_number, operand, second_number = @values.slice!(0..2)
+    while !values.empty? do
+      first_number, operand, second_number = values.slice!(0..2)
 
       if second_number
         @result = first_number.send(operand, second_number)
       else
-        @result = @result.send(first_number, operand)
+        @result = result.send(first_number, operand)
       end
     end
 
-    @result
+    result
   end
 
   def parse_question_to_values
-    prepare_question
+    parse_question
     parse_values
   end
 
-  def prepare_question
-    @question = @question.sub("What is ", "").gsub("by", "").sub("?", "")
-    @question = @question.split(" ")
+  def parse_question
+    @question = question.sub("What is ", "").gsub("by", "").sub("?", "")
+    @question = question.split(" ")
   end
 
   def parse_values
-    @values = @question.map do |value|
+    @values = question.map do |value|
       if OPERATORS.include?(value)
         OPERATORS[value].to_sym
       else
@@ -64,5 +64,7 @@ class WordProblem
       end
     end
   end
+
+  attr_reader :question, :values, :result
 end
 
