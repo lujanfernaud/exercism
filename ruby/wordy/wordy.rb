@@ -3,7 +3,6 @@ class WordProblem
 
   def initialize(question)
     @question = question
-    @result   = 0
   end
 
   def answer
@@ -27,7 +26,7 @@ class WordProblem
     ValuesParser.run(values)
   end
 
-  attr_reader :question, :result
+  attr_reader :question
 end
 
 class QuestionParser
@@ -85,11 +84,11 @@ class ValuesParser
     while !values.empty? do
       first_number, operand, second_number = values.slice!(0..2)
 
-      if second_number
-        @result = first_number.send(operand, second_number)
-      else
-        @result = result.send(first_number, operand)
-      end
+      @result = if second_number
+                  first_number.send(operand, second_number)
+                else
+                  result.send(first_number, operand)
+                end
     end
 
     result
