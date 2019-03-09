@@ -24,17 +24,7 @@ class WordProblem
   def parse_operation
     values = QuestionParser.run(question)
 
-    while !values.empty? do
-      first_number, operand, second_number = values.slice!(0..2)
-
-      if second_number
-        @result = first_number.send(operand, second_number)
-      else
-        @result = result.send(first_number, operand)
-      end
-    end
-
-    result
+    ValuesParser.run(values)
   end
 
   attr_reader :question, :result
@@ -79,4 +69,33 @@ class QuestionParser
   end
 
   attr_reader :question
+end
+
+class ValuesParser
+  def self.run(values)
+    new(values).parse
+  end
+
+  def initialize(values)
+    @values = values
+    @result = 0
+  end
+
+  def parse
+    while !values.empty? do
+      first_number, operand, second_number = values.slice!(0..2)
+
+      if second_number
+        @result = first_number.send(operand, second_number)
+      else
+        @result = result.send(first_number, operand)
+      end
+    end
+
+    result
+  end
+
+  private
+
+  attr_reader :values, :result
 end
