@@ -18,6 +18,7 @@ class WordProblem
 
   def evaluate_problem
     values = QuestionParser.run(question)
+
     OperationEvaluator.run(values)
   end
 

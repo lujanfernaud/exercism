@@ -22,8 +22,7 @@ class QuestionParser
   private
 
   def prepare_question
-    @question = question.sub("What is ", "").gsub("by", "").sub("?", "")
-    @question = question.split(" ")
+    @question = question.sub("What is ", "").gsub("by", "").chop.split(" ")
   end
 
   def parse_values
