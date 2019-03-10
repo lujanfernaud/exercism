@@ -4,18 +4,10 @@ class Matrix
   end
 
   def rows
-    @rows ||= matrix.map(&method(:individual_rows))
+    @rows ||= @matrix.map { |item| item.split.map(&:to_i) }
   end
 
   def columns
     rows.transpose
   end
-
-  private
-
-  def individual_rows(item)
-    item.split.map(&:to_i)
-  end
-
-  attr_reader :matrix
 end
