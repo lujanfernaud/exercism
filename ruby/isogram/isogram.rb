@@ -4,6 +4,6 @@ class Isogram
 
     return true if string.empty?
 
-    string.gsub(/\W/, "").chars.uniq.join == string.gsub(/\W/, "")
+    string.scan(/\w/).uniq == string.scan(/\w/)
   end
 end
