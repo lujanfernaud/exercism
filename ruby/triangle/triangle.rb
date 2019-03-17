@@ -18,11 +18,7 @@ class Triangle
   private
 
   def valid?
-    !sides_too_short? && valid_proportions?
-  end
-
-  def sides_too_short?
-    !(unique_side_lengths & [0, 1]).empty?
+    !unique_side_lengths.include?(0) && valid_proportions?
   end
 
   def unique_side_lengths
