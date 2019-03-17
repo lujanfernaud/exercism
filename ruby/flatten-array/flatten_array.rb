@@ -16,13 +16,13 @@ class FlattenArray
   private
 
   def extract_values_from(array)
-    array.each do |value|
-      next if value.nil?
+    array.each do |item|
+      next if item.nil?
 
-      if value.is_a?(Array)
-        extract_values_from(value)
+      if item.is_a?(Array)
+        extract_values_from(item)
       else
-        @new_array << value
+        @new_array << item
       end
     end
   end
