@@ -4,16 +4,16 @@ class Anagram
   end
 
   def match(candidates)
-    candidates.select do |candidate|
-      next if candidate.casecmp(word).zero?
-
-      candidate if candidate.downcase.chars.sort == sorted_characters
-    end
+    candidates.select { |candidate| anagram?(candidate) }
   end
 
   private
 
-  def sorted_characters
+  def anagram?(candidate)
+    !candidate.casecmp(word).zero? && chars_for(candidate) == chars_for(word)
+  end
+
+  def chars_for(word)
     word.downcase.chars.sort
   end
 
