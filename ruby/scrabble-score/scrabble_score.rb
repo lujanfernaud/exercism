@@ -18,10 +18,14 @@ class Scrabble
   end
 
   def score
-    characters.map(&method(:to_score)).sum
+    characters_scores.sum
   end
 
   private
+
+  def characters_scores
+    characters.map(&method(:to_score))
+  end
 
   def characters
     word.upcase.scan(/\w/)
