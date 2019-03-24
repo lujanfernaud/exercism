@@ -14,12 +14,10 @@ class Scrabble
   end
 
   def initialize(word)
-    @word = word
+    @word = word.to_s
   end
 
   def score
-    return 0 if word.nil?
-
     characters.map(&method(:to_score)).sum
   end
 
