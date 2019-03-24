@@ -1,4 +1,4 @@
-class Scrabble
+module CharacterToScrabbleScore
   SCORES = {
     1  => %w[A E I O U L N R S T],
     2  => %w[D G],
@@ -9,6 +9,18 @@ class Scrabble
     10 => %w[Q Z]
   }
 
+  refine String do
+    def to_scrabble_score
+      character = self[0].upcase
+
+      SCORES.find { |_key, value| value.include?(character) }.first
+    end
+  end
+end
+
+class Scrabble
+  using CharacterToScrabbleScore
+
   def self.score(word)
     new(word).score
   end
@@ -18,22 +30,12 @@ class Scrabble
   end
 
   def score
-    characters_scores.sum
+    characters.sum(&:to_scrabble_score)
   end
 
   private
 
-  def characters_scores
-    characters.map(&method(:to_score))
-  end
-
   def characters
-    word.upcase.scan(/\w/)
+    @word.scan(/\w/)
   end
-
-  def to_score(character)
-    SCORES.find { |_key, value| value.include?(character) }.first
-  end
-
-  attr_reader :word
 end
