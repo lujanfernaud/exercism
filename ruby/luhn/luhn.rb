@@ -8,13 +8,16 @@ class Luhn
   end
 
   def valid?
-    return false if numbers_string.strip.length <= 1
-    return false if numbers_string.gsub(/\s/, "") =~ /\D/
+    return false if sanitized_string.length <= 1 || sanitized_string =~ /\D/
 
     (with_second_digits_doubled.sum % 10).zero?
   end
 
   private
+
+  def sanitized_string
+    @sanitized_string ||= numbers_string.strip.gsub(/\s/, "")
+  end
 
   def with_second_digits_doubled
     parsed_digits.reverse.map.with_index do |digit, index|
