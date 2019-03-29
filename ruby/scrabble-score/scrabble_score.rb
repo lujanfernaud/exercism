@@ -14,7 +14,7 @@ class Scrabble
   end
 
   def initialize(word)
-    @word = word.to_s
+    @word = word || ""
   end
 
   def score
