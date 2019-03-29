@@ -16,7 +16,7 @@ class Luhn
   private
 
   def sanitized_string
-    @sanitized_string ||= numbers_string.strip.gsub(/\s/, "")
+    @sanitized_string ||= @numbers_string.strip.gsub(/\s/, "")
   end
 
   def with_second_digits_doubled
@@ -30,7 +30,7 @@ class Luhn
   end
 
   def parsed_digits
-    numbers_string.scan(/\d/)
+    @numbers_string.scan(/\d/)
   end
 
   def double(digit)
@@ -40,6 +40,4 @@ class Luhn
 
     doubled_digit - 9
   end
-
-  attr_reader :numbers_string
 end
