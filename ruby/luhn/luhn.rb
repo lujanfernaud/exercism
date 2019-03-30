@@ -22,9 +22,9 @@ class Luhn
   def checksum
     [].tap do |array|
       digits.reverse.each_slice(2) do |pair|
-        array << [pair[0].to_i, double(pair[1])]
+        array << pair[0].to_i << double(pair[1])
       end
-    end.flatten.sum
+    end.sum
   end
 
   def digits
