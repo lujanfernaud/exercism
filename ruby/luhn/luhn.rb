@@ -20,13 +20,11 @@ class Luhn
   end
 
   def checksum
-    parsed_digits.reverse.map.with_index do |digit, index|
-      if index.even?
-        digit.to_i
-      else
-        double(digit)
+    [].tap do |array|
+      parsed_digits.reverse.each_slice(2) do |pair|
+        array << [pair[0].to_i, double(pair[1])]
       end
-    end.sum
+    end.flatten.sum
   end
 
   def parsed_digits
