@@ -10,7 +10,7 @@ class Luhn
   def valid?
     return false if numbers.length <= 1 || numbers =~ /\D/
 
-    (with_second_digits_doubled.sum % 10).zero?
+    (checksum % 10).zero?
   end
 
   private
@@ -19,14 +19,14 @@ class Luhn
     numbers.strip.gsub(/\s/, "")
   end
 
-  def with_second_digits_doubled
+  def checksum
     parsed_digits.reverse.map.with_index do |digit, index|
       if index.even?
         digit.to_i
       else
         double(digit)
       end
-    end.reverse
+    end.sum
   end
 
   def parsed_digits
