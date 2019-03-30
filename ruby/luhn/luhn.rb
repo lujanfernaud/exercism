@@ -20,7 +20,7 @@ class Luhn
   end
 
   def checksum
-    digits.reverse.each_slice(2).sum do |even = 0, odd|
+    digits.reverse.each_slice(2).sum do |even, odd = 0|
       even + double(odd)
     end
   end
