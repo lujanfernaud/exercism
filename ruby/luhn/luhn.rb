@@ -28,7 +28,7 @@ class Luhn
   end
 
   def digits
-    @number.scan(/\d/)
+    number.scan(/\d/)
   end
 
   def double(digit)
