@@ -21,13 +21,13 @@ class Luhn
 
   def checksum
     [].tap do |array|
-      parsed_digits.reverse.each_slice(2) do |pair|
+      digits.reverse.each_slice(2) do |pair|
         array << [pair[0].to_i, double(pair[1])]
       end
     end.flatten.sum
   end
 
-  def parsed_digits
+  def digits
     @numbers.scan(/\d/)
   end
 
