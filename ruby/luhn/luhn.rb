@@ -20,17 +20,17 @@ class Luhn
   end
 
   def checksum
-    digits.reverse.each_slice(2).sum do |even, odd|
-      even.to_i + double(odd)
+    digits.reverse.each_slice(2).sum do |even = 0, odd|
+      even + double(odd)
     end
   end
 
   def digits
-    number.scan(/\d/)
+    number.scan(/\d/).map(&:to_i)
   end
 
   def double(digit)
-    doubled_digit = digit.to_i * 2
+    doubled_digit = digit * 2
 
     return doubled_digit if doubled_digit < 9
 
