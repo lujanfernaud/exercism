@@ -18,16 +18,16 @@ class Scrabble
   end
 
   def score
-    characters.sum(&method(:to_score))
+    letters.sum(&method(:to_score))
   end
 
   private
 
-  def characters
-    @word.upcase.scan(/\w/)
+  def letters
+    @word.upcase.scan(/[A-Z]/)
   end
 
-  def to_score(character)
-    SCORES.find { |_key, value| value.include?(character) }.first
+  def to_score(letter)
+    SCORES.find { |_key, value| value.include?(letter) }.first
   end
 end

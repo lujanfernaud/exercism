@@ -45,4 +45,9 @@ class ScrabbleTest < Minitest::Test
     # skip
     assert_equal 13, Scrabble.score('alacrity')
   end
+
+  def test_skips_numbers_and_underscores
+    # skip
+    assert_equal 13, Scrabble.score('12 ala_crity')
+  end
 end
