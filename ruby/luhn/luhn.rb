@@ -1,22 +1,22 @@
 class Luhn
-  def self.valid?(numbers)
-    new(numbers).valid?
+  def self.valid?(number)
+    new(number).valid?
   end
 
-  def initialize(numbers)
-    @numbers = sanitize(numbers)
+  def initialize(number)
+    @number = sanitize(number)
   end
 
   def valid?
-    return false if numbers.length <= 1 || numbers =~ /\D/
+    return false if number.length <= 1 || number =~ /\D/
 
     (checksum % 10).zero?
   end
 
   private
 
-  def sanitize(numbers)
-    numbers.strip.gsub(/\s/, "")
+  def sanitize(number)
+    number.strip.gsub(/\s/, "")
   end
 
   def checksum
@@ -28,7 +28,7 @@ class Luhn
   end
 
   def digits
-    @numbers.scan(/\d/)
+    @number.scan(/\d/)
   end
 
   def double(digit)
@@ -39,5 +39,5 @@ class Luhn
     doubled_digit - 9
   end
 
-  attr_reader :numbers
+  attr_reader :number
 end
