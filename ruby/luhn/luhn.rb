@@ -20,11 +20,9 @@ class Luhn
   end
 
   def checksum
-    [].tap do |array|
-      digits.reverse.each_slice(2) do |pair|
-        array << pair[0].to_i << double(pair[1])
-      end
-    end.sum
+    digits.reverse.each_slice(2).sum do |even, odd|
+      even.to_i + double(odd)
+    end
   end
 
   def digits
