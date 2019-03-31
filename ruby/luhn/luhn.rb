@@ -32,7 +32,7 @@ class Luhn
   def double(digit)
     doubled_digit = digit * 2
 
-    return doubled_digit if doubled_digit < 9
+    return doubled_digit if doubled_digit < 10
 
     doubled_digit - 9
   end
