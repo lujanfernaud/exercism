@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
 class Clock
-  MAXIMUM_HOURS = 24
   SECONDS = 60
 
-  def initialize(hour: 0, minute: 0)
-    @hour = hour % MAXIMUM_HOURS
+  def initialize(hour: 0, minute: 0, maximum_hours: 24)
+    @hour = hour % maximum_hours
     @minute = minute
+    @maximum_hours = maximum_hours
   end
 
   def to_s
@@ -33,9 +33,9 @@ class Clock
 
   def hour
     if minute >= 0
-      (@hour + additional_hours_from_minutes) % MAXIMUM_HOURS
+      (@hour + additional_hours_from_minutes) % maximum_hours
     else
-      (@hour - additional_hours_from_minutes) % MAXIMUM_HOURS
+      (@hour - additional_hours_from_minutes) % maximum_hours
     end
   end
 
@@ -44,6 +44,8 @@ class Clock
   end
 
   private
+
+  attr_reader :maximum_hours
 
   def formatted(time)
     format("%02d", time)
