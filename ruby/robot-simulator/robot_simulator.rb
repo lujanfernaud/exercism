@@ -12,13 +12,13 @@ class Robot
     west: -1
   }.freeze
 
-  attr_reader :direction
+  attr_accessor :direction
 
   def_delegators :@grid, :coordinates
 
-  def initialize
-    @direction = :north
-    @grid = Grid.new
+  def initialize(direction: :north, grid: Grid.new)
+    @direction = direction
+    @grid = grid
   end
 
   def orient(direction)
@@ -98,5 +98,30 @@ class Grid
   def coordinates=(args)
     @x = args[0].to_i
     @y = args[1].to_i
+  end
+end
+
+class Simulator
+  INSTRUCTIONS = {
+    "L" => :turn_left,
+    "R" => :turn_right,
+    "A" => :advance
+  }.freeze
+
+  def instructions(instructions)
+    instructions.split("").map do |instruction|
+      INSTRUCTIONS[instruction]
+    end
+  end
+
+  def place(robot, args)
+    robot.at(args[:x], args[:y])
+    robot.direction = args[:direction]
+  end
+
+  def evaluate(robot, instructions)
+    instructions(instructions).each do |instruction|
+      robot.send(instruction)
+    end
   end
 end
