@@ -1,5 +1,7 @@
-require 'minitest/autorun'
-require_relative 'clock'
+# frozen_string_literal: true
+
+require "minitest/autorun"
+require_relative "clock"
 
 # Common test data version: 2.4.0 b344762
 class ClockTest < Minitest::Test
@@ -48,6 +50,12 @@ class ClockTest < Minitest::Test
     assert_equal "03:40", Clock.new(hour: 25, minute: 160).to_s
   end
 
+  def test_hour_and_minutes_roll_over_in_twelve_hour_clock
+    # skip
+    assert_equal "03:40",
+                 Clock.new(hour: 25, minute: 160, maximum_hours: 12).to_s
+  end
+
   def test_hour_and_minutes_roll_over_continuously
     # skip
     assert_equal "11:01", Clock.new(hour: 201, minute: 3001).to_s
@@ -63,9 +71,20 @@ class ClockTest < Minitest::Test
     assert_equal "23:15", Clock.new(hour: -1, minute: 15).to_s
   end
 
+  def test_negative_hour_in_twelve_hour_clock
+    # skip
+    assert_equal "11:15",
+                 Clock.new(hour: -1, minute: 15, maximum_hours: 12).to_s
+  end
+
   def test_negative_hour_rolls_over
     # skip
     assert_equal "23:00", Clock.new(hour: -25).to_s
+  end
+
+  def test_negative_hour_rolls_over_in_twelve_hour_clock
+    # skip
+    assert_equal "11:00", Clock.new(hour: -25, maximum_hours: 12).to_s
   end
 
   def test_negative_hour_rolls_over_continuously
@@ -83,6 +102,12 @@ class ClockTest < Minitest::Test
     assert_equal "22:20", Clock.new(hour: 1, minute: -160).to_s
   end
 
+  def test_negative_minutes_roll_over_in_twelve_hour_clock
+    # skip
+    assert_equal "10:20",
+                 Clock.new(hour: 1, minute: -160, maximum_hours: 12).to_s
+  end
+
   def test_negative_minutes_roll_over_continuously
     # skip
     assert_equal "16:40", Clock.new(hour: 1, minute: -4820).to_s
@@ -96,6 +121,12 @@ class ClockTest < Minitest::Test
   def test_negative_hour_and_minutes_both_roll_over
     # skip
     assert_equal "20:20", Clock.new(hour: -25, minute: -160).to_s
+  end
+
+  def test_negative_hour_and_minutes_both_roll_over_in_twelve_hour_clock
+    # skip
+    assert_equal "08:20",
+                 Clock.new(hour: -25, minute: -160, maximum_hours: 12).to_s
   end
 
   def test_negative_hour_and_minutes_both_roll_over_continuously
@@ -300,7 +331,7 @@ class ClockTest < Minitest::Test
   def test_clocks_with_negative_hours_and_minutes_that_wrap
     # skip
     clock1 = Clock.new(hour: 18, minute: 7)
-    clock2 = Clock.new(hour: -54, minute: -11513)
+    clock2 = Clock.new(hour: -54, minute: -11_513)
     assert clock1 == clock2
   end
 

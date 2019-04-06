@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Clock
-  SECONDS_IN_A_MINUTE = 60
+  attr_reader :maximum_hours
 
   def initialize(hour: 0, minute: 0, maximum_hours: 24)
     @hour = hour % maximum_hours
@@ -45,7 +45,7 @@ class Clock
 
   private
 
-  attr_reader :maximum_hours
+  SECONDS_IN_A_MINUTE = 60
 
   def formatted(time)
     format("%02d", time)
