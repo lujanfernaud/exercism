@@ -9,6 +9,18 @@ class Clock
     @maximum_hours = maximum_hours
   end
 
+  def hour
+    if minute >= 0
+      (@hour + additional_hours_from_minutes) % maximum_hours
+    else
+      (@hour - additional_hours_from_minutes) % maximum_hours
+    end
+  end
+
+  def minute
+    @minute % SECONDS_IN_A_MINUTE
+  end
+
   def to_s
     "#{formatted(hour)}:#{formatted(minute)}"
   end
@@ -35,21 +47,13 @@ class Clock
     hour == other.hour && minute == other.minute && compatible?(other)
   end
 
-  def hour
-    if minute >= 0
-      (@hour + additional_hours_from_minutes) % maximum_hours
-    else
-      (@hour - additional_hours_from_minutes) % maximum_hours
-    end
-  end
-
-  def minute
-    @minute % SECONDS_IN_A_MINUTE
-  end
-
   private
 
   SECONDS_IN_A_MINUTE = 60
+
+  def additional_hours_from_minutes
+    @minute / SECONDS_IN_A_MINUTE
+  end
 
   def formatted(time)
     format("%02d", time)
@@ -59,13 +63,9 @@ class Clock
     maximum_hours == other.maximum_hours
   end
 
-  def additional_hours_from_minutes
-    @minute / SECONDS_IN_A_MINUTE
-  end
-
   class IncompatibleError < StandardError
     def self.message
-      "Clocks need to have the same maximum hours"
+      "Clocks need to have the same maximum hours."
     end
   end
 end
