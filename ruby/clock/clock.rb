@@ -24,19 +24,13 @@ class Clock
   def +(other)
     raise IncompatibleError, IncompatibleError.message unless compatible?(other)
 
-    total_hours = hour + other.hour
-    total_minutes = minute + other.minute
-
-    Clock.new(hour: total_hours, minute: total_minutes)
+    recalculated_new_clock(other, :+)
   end
 
   def -(other)
     raise IncompatibleError, IncompatibleError.message unless compatible?(other)
 
-    total_hours = hour - other.hour
-    total_minutes = minute - other.minute
-
-    Clock.new(hour: total_hours, minute: total_minutes)
+    recalculated_new_clock(other, :-)
   end
 
   def ==(other)
@@ -57,6 +51,13 @@ class Clock
 
   def formatted(time)
     format("%02d", time)
+  end
+
+  def recalculated_new_clock(other_clock, operation)
+    total_hours = hour.send(operation.to_sym, other_clock.hour)
+    total_minutes = minute.send(operation.to_sym, other_clock.minute)
+
+    Clock.new(hour: total_hours, minute: total_minutes)
   end
 
   def compatible?(other)
