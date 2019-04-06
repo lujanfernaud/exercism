@@ -14,9 +14,7 @@ class Clock
   end
 
   def +(other)
-    unless compatible?(other)
-      raise IncompatibleError, "Clocks need to have the same maximum hours"
-    end
+    raise IncompatibleError, IncompatibleError.message unless compatible?(other)
 
     total_hours = hour + other.hour
     total_minutes = minute + other.minute
@@ -25,9 +23,7 @@ class Clock
   end
 
   def -(other)
-    unless compatible?(other)
-      raise IncompatibleError, "Clocks need to have the same maximum hours"
-    end
+    raise IncompatibleError, IncompatibleError.message unless compatible?(other)
 
     total_hours = hour - other.hour
     total_minutes = minute - other.minute
@@ -67,5 +63,9 @@ class Clock
     @minute / SECONDS_IN_A_MINUTE
   end
 
-  class IncompatibleError < StandardError; end
+  class IncompatibleError < StandardError
+    def self.message
+      "Clocks need to have the same maximum hours"
+    end
+  end
 end

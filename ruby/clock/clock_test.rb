@@ -237,7 +237,7 @@ class ClockTest < Minitest::Test
     assert clock1 == clock2
   end
 
-  def test_clocks_with_same_time_and_differnt_maximum_hours
+  def test_clocks_with_same_time_and_different_maximum_hours
     # skip
     clock1 = Clock.new(hour: 15, minute: 37, maximum_hours: 24)
     clock2 = Clock.new(hour: 15, minute: 37, maximum_hours: 12)
