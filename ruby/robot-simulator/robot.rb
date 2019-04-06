@@ -1,10 +1,6 @@
 # frozen_string_literal: true
 
-require "forwardable"
-
 class Robot
-  extend Forwardable
-
   ADVANCE_POSITIONS = {
     north: 1,
     east: 1,
@@ -13,8 +9,6 @@ class Robot
   }.freeze
 
   attr_accessor :direction
-
-  def_delegators :@grid, :coordinates
 
   def initialize(direction: :north, grid: Grid.new)
     @direction = direction
@@ -47,6 +41,10 @@ class Robot
     current_axis_value = @grid.send(axis)
 
     @grid.send("#{axis}=", current_axis_value + advance_positions)
+  end
+
+  def coordinates
+    @grid.coordinates
   end
 
   private
