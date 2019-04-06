@@ -39,4 +39,16 @@ class Grid
     @x = args[0].to_i
     @y = args[1].to_i
   end
+
+  def correct_direction?(direction)
+    DIRECTIONS.key?(direction)
+  end
+
+  def find_direction(direction, side)
+    DIRECTIONS[direction][side]
+  end
+
+  def axis_for(direction)
+    DIRECTIONS[direction][:axis]
+  end
 end

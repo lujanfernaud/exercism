@@ -22,7 +22,7 @@ class Robot
   end
 
   def orient(direction)
-    raise ArgumentError unless Grid::DIRECTIONS.key?(direction)
+    raise ArgumentError unless @grid.correct_direction?(direction)
 
     @direction = direction
   end
@@ -32,11 +32,11 @@ class Robot
   end
 
   def turn_right
-    @direction = Grid::DIRECTIONS[direction][:right]
+    @direction = @grid.find_direction(direction, :right)
   end
 
   def turn_left
-    @direction = Grid::DIRECTIONS[direction][:left]
+    @direction = @grid.find_direction(direction, :left)
   end
 
   def at(*coordinates)
@@ -52,7 +52,7 @@ class Robot
   private
 
   def axis
-    Grid::DIRECTIONS[direction][:axis]
+    @grid.axis_for(direction)
   end
 
   def advance_positions
