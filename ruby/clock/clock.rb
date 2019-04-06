@@ -11,9 +11,9 @@ class Clock
 
   def hour
     if minute >= 0
-      (@hour + additional_hours_from_minutes) % maximum_hours
+      recalculated_hour(:+)
     else
-      (@hour - additional_hours_from_minutes) % maximum_hours
+      recalculated_hour(:-)
     end
   end
 
@@ -50,6 +50,10 @@ class Clock
   private
 
   SECONDS_IN_A_MINUTE = 60
+
+  def recalculated_hour(operator)
+    @hour.send(operator.to_sym, additional_hours_from_minutes) % maximum_hours
+  end
 
   def additional_hours_from_minutes
     @minute / SECONDS_IN_A_MINUTE
