@@ -10,11 +10,7 @@ class Clock
   end
 
   def hour
-    if minute >= 0
-      recalculated_hour(:+)
-    else
-      recalculated_hour(:-)
-    end
+    minute >= 0 ? recalculated_hour(:+) : recalculated_hour(:-)
   end
 
   def minute
