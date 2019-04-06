@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Clock
-  SECONDS = 60
+  SECONDS_IN_A_MINUTE = 60
 
   def initialize(hour: 0, minute: 0, maximum_hours: 24)
     @hour = hour % maximum_hours
@@ -40,7 +40,7 @@ class Clock
   end
 
   def minute
-    @minute % SECONDS
+    @minute % SECONDS_IN_A_MINUTE
   end
 
   private
@@ -52,6 +52,6 @@ class Clock
   end
 
   def additional_hours_from_minutes
-    @minute / SECONDS
+    @minute / SECONDS_IN_A_MINUTE
   end
 end
