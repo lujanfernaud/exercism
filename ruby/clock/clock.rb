@@ -1,52 +1,55 @@
+# frozen_string_literal: true
+
 class Clock
   MAXIMUM_HOURS = 24
+  SECONDS = 60
 
-  attr_reader :hour, :minute
-
-  def initialize(args)
-    @hour = args[:hour] || 0
-    @minute = args[:minute] || 0
+  def initialize(hour: 0, minute: 0)
+    @hour = hour % MAXIMUM_HOURS
+    @minute = minute
   end
 
   def to_s
-    "#{format("%02d", hours)}:#{format("%02d", minutes)}"
+    "#{formatted(hour)}:#{formatted(minute)}"
   end
 
   def +(other)
-    hour = @hour + other.hours
-    minute = @minute + other.minutes
+    total_hours = hour + other.hour
+    total_minutes = minute + other.minute
 
-    Clock.new(hour: hour, minute: minute)
+    Clock.new(hour: total_hours, minute: total_minutes)
   end
 
   def -(other)
-    hour = @hour - other.hours
-    minute = @minute - other.minutes
+    total_hours = hour - other.hour
+    total_minutes = minute - other.minute
 
-    Clock.new(hour: hour, minute: minute)
+    Clock.new(hour: total_hours, minute: total_minutes)
   end
 
   def ==(other)
-    hours == other.hours && minutes == other.minutes
+    hour == other.hour && minute == other.minute
   end
 
-  def hours
-    hours = @hour % MAXIMUM_HOURS
-
-    if minutes >= 0
-      (hours + additional_hours_from_minutes) % MAXIMUM_HOURS
+  def hour
+    if minute >= 0
+      (@hour + additional_hours_from_minutes) % MAXIMUM_HOURS
     else
-      (hours - additional_hours_from_minutes) % MAXIMUM_HOURS
+      (@hour - additional_hours_from_minutes) % MAXIMUM_HOURS
     end
   end
 
-  def minutes
-    minute % 60
+  def minute
+    @minute % SECONDS
   end
 
   private
 
+  def formatted(time)
+    format("%02d", time)
+  end
+
   def additional_hours_from_minutes
-    minute / 60
+    @minute / SECONDS
   end
 end
