@@ -42,7 +42,7 @@ class Position
     @y = args[1].to_i
   end
 
-  def change_coordinate(direction, positions)
+  def change(direction, positions)
     axis = DIRECTIONS[direction][:axis]
     current_axis_value = send(axis)
     advance_positions = positions * DIRECTIONS[direction][:multiplier]

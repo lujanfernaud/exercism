@@ -28,7 +28,7 @@ class Robot
   end
 
   def advance
-    position.change_coordinate(bearing, speed)
+    position.change(bearing, speed)
   end
 
   def coordinates
