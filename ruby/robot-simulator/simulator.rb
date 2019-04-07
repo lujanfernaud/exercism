@@ -8,9 +8,7 @@ class Simulator
   }.freeze
 
   def instructions(instructions)
-    instructions.split("").map do |instruction|
-      INSTRUCTIONS[instruction]
-    end
+    instructions.chars.map(&INSTRUCTIONS)
   end
 
   def place(robot, args)
@@ -19,8 +17,6 @@ class Simulator
   end
 
   def evaluate(robot, instructions)
-    instructions(instructions).each do |instruction|
-      robot.send(instruction)
-    end
+    instructions(instructions).each(&robot.method(:send))
   end
 end
