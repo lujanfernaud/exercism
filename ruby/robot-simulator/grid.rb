@@ -4,27 +4,29 @@ class Grid
   DIRECTIONS = {
     north: {
       axis: :y,
+      multiplier: 1,
       right: :east,
       left: :west
     },
     east: {
       axis: :x,
+      multiplier: 1,
       right: :south,
       left: :north
     },
     south: {
       axis: :y,
+      multiplier: -1,
       right: :west,
       left: :east
     },
     west: {
       axis: :x,
+      multiplier: -1,
       right: :north,
       left: :south
     }
   }.freeze
-
-  attr_accessor :x, :y
 
   def initialize(x: 0, y: 0)
     @x = x.to_i
@@ -40,6 +42,14 @@ class Grid
     @y = args[1].to_i
   end
 
+  def change_coordinate(direction, positions)
+    axis = DIRECTIONS[direction][:axis]
+    current_axis_value = send(axis)
+    advance_positions = positions * DIRECTIONS[direction][:multiplier]
+
+    send("#{axis}=", current_axis_value + advance_positions)
+  end
+
   def correct_direction?(direction)
     DIRECTIONS.key?(direction)
   end
@@ -48,7 +58,7 @@ class Grid
     DIRECTIONS[direction][side]
   end
 
-  def axis_for(direction)
-    DIRECTIONS[direction][:axis]
-  end
+  private
+
+  attr_accessor :x, :y
 end
