@@ -3,39 +3,39 @@
 class Robot
   attr_reader :bearing, :speed
 
-  def initialize(bearing: :north, speed: 1, grid: Grid.new)
+  def initialize(bearing: :north, speed: 1, position: Position.new)
     @bearing = bearing
     @speed = speed
-    @grid = grid
+    @position = position
   end
 
   def orient(direction)
-    raise ArgumentError unless grid.correct_direction?(direction)
+    raise ArgumentError unless position.correct_direction?(direction)
 
     @bearing = direction
   end
 
   def turn_right
-    @bearing = grid.find_direction(bearing, :right)
+    @bearing = position.find_direction(bearing, :right)
   end
 
   def turn_left
-    @bearing = grid.find_direction(bearing, :left)
+    @bearing = position.find_direction(bearing, :left)
   end
 
   def at(*coordinates)
-    grid.coordinates = coordinates
+    position.coordinates = coordinates
   end
 
   def advance
-    grid.change_coordinate(bearing, speed)
+    position.change_coordinate(bearing, speed)
   end
 
   def coordinates
-    grid.coordinates
+    position.coordinates
   end
 
   private
 
-  attr_reader :grid
+  attr_reader :position
 end

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Grid
+class Position
   DIRECTIONS = {
     north: {
       axis: :y,
