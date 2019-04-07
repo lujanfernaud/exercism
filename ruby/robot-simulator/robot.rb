@@ -1,11 +1,10 @@
 # frozen_string_literal: true
 
 class Robot
-  attr_accessor :direction
-  attr_reader :speed
+  attr_reader :bearing, :speed
 
-  def initialize(direction: :north, speed: 1, grid: Grid.new)
-    @direction = direction
+  def initialize(bearing: :north, speed: 1, grid: Grid.new)
+    @bearing = bearing
     @speed = speed
     @grid = grid
   end
@@ -13,19 +12,15 @@ class Robot
   def orient(direction)
     raise ArgumentError unless grid.correct_direction?(direction)
 
-    @direction = direction
-  end
-
-  def bearing
-    direction
+    @bearing = direction
   end
 
   def turn_right
-    @direction = grid.find_direction(direction, :right)
+    @bearing = grid.find_direction(bearing, :right)
   end
 
   def turn_left
-    @direction = grid.find_direction(direction, :left)
+    @bearing = grid.find_direction(bearing, :left)
   end
 
   def at(*coordinates)
@@ -33,7 +28,7 @@ class Robot
   end
 
   def advance
-    grid.change_coordinate(direction, speed)
+    grid.change_coordinate(bearing, speed)
   end
 
   def coordinates

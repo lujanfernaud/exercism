@@ -13,7 +13,7 @@ class Simulator
 
   def place(robot, args)
     robot.at(args[:x], args[:y])
-    robot.direction = args[:direction]
+    robot.orient(args[:direction])
   end
 
   def evaluate(robot, instructions)
