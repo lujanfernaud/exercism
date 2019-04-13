@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Clock
-  attr_reader :time_in_minutes, :time
+  attr_reader :time
 
   MINUTES_IN_AN_HOUR = 60
   SECONDS_IN_A_MINUTE = 60
