@@ -5,7 +5,7 @@ import (
 	"fmt"
 )
 
-// ShareWith returns sentence with given name, or with "you" is no name is
+// ShareWith returns sentence with given name, or with "you" if no name is
 // provided.
 func ShareWith(name string) string {
 	if name == "" {
