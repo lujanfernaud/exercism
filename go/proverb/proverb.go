@@ -9,6 +9,12 @@ func Proverb(rhyme []string) []string {
 		return []string{}
 	}
 
+	result := initialSentences(rhyme)
+
+	return append(result, lastSentence(rhyme))
+}
+
+func initialSentences(rhyme []string) []string {
 	result := []string{}
 
 	for i := 0; i+1 < len(rhyme); i++ {
@@ -18,9 +24,9 @@ func Proverb(rhyme []string) []string {
 		result = append(result, sentence)
 	}
 
-	lastSentence := fmt.Sprintf("And all for the want of a %s.", rhyme[0])
-
-	result = append(result, lastSentence)
-
 	return result
+}
+
+func lastSentence(rhyme []string) string {
+	return fmt.Sprintf("And all for the want of a %s.", rhyme[0])
 }
