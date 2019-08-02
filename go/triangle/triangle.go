@@ -25,32 +25,26 @@ func KindFromSides(a, b, c float64) Kind {
 		return NaT
 	}
 
-	uniqueSides := sidesWithTheSameLength(values)
+	uniqueSides := calculateUniqueSides(values)
 
 	return triangleKind(uniqueSides)
 }
 
 func incorrectValues(values []float64) bool {
-	if values[0] == 0 || values[1] == 0 || values[2] == 0 {
-		return true
-	}
-
 	if len(values) == 3 && values[0]+values[1] < values[2] {
 		return true
 	}
 
-	if math.IsNaN(values[0]) || math.IsNaN(values[1]) || math.IsNaN(values[2]) {
-		return true
-	}
-
-	if math.IsInf(values[0], 0) || math.IsInf(values[1], 0) || math.IsInf(values[2], 0) {
-		return true
+	for _, value := range values {
+		if value == 0 || math.IsNaN(value) || math.IsInf(value, 0) {
+			return true
+		}
 	}
 
 	return false
 }
 
-func sidesWithTheSameLength(values []float64) int {
+func calculateUniqueSides(values []float64) int {
 	lengths := map[float64]bool{}
 
 	for _, value := range values {
