@@ -2,7 +2,6 @@ package triangle
 
 import (
 	"math"
-	"sort"
 )
 
 // Kind is used to specify the triangle type.
@@ -18,7 +17,7 @@ const (
 
 // KindFromSides returns the type of triangle depending on the sizes of the sides.
 func KindFromSides(a, b, c float64) Kind {
-	if incorrectValues(a, b, c) {
+	if notATriangle(a, b, c) {
 		return NaT
 	}
 
@@ -33,16 +32,15 @@ func KindFromSides(a, b, c float64) Kind {
 	return Sca
 }
 
-func incorrectValues(a, b, c float64) bool {
-	values := []float64{a, b, c}
-	sort.Float64s(values)
-
-	if values[0]+values[1] < values[2] {
+func notATriangle(a, b, c float64) bool {
+	if a+b < c || a+c < b || b+c < a {
 		return true
 	}
 
-	for _, value := range values {
-		if value == 0 || math.IsNaN(value) || math.IsInf(value, 0) {
+	lengths := []float64{a, b, c}
+
+	for _, length := range lengths {
+		if length == 0 || math.IsNaN(length) || math.IsInf(length, 0) {
 			return true
 		}
 	}
