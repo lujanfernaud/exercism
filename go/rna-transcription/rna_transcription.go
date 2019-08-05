@@ -1,7 +1,5 @@
 package strand
 
-import "strings"
-
 // DNAtoRNA provides the mapping of DNA nucleotides to RNA nucleotides.
 var DNAtoRNA = map[string]string{
 	"G": "C",
@@ -12,12 +10,11 @@ var DNAtoRNA = map[string]string{
 
 // ToRNA converts a DNA strand to an RNA strand.
 func ToRNA(dna string) string {
-	nucleotides := strings.Split(dna, "")
-	var result []string
+	var result string
 
-	for _, nucleotide := range nucleotides {
-		result = append(result, DNAtoRNA[nucleotide])
+	for _, nucleotide := range dna {
+		result += DNAtoRNA[string(nucleotide)]
 	}
 
-	return strings.Join(result, "")
+	return result
 }
