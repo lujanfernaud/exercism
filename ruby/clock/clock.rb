@@ -3,44 +3,42 @@
 class Clock
   attr_reader :time
 
-  MINUTES_IN_AN_HOUR = 60
-  SECONDS_IN_A_MINUTE = 60
+  SECONDS_PER_MINUTE = 60
+  MINUTES_PER_HOUR = 60
+  HOURS_PER_DAY = 24
+  MINUTES_PER_DAY = MINUTES_PER_HOUR * HOURS_PER_DAY
 
   def initialize(hour: 0, minute: 0)
-    @time_in_minutes = (hour * MINUTES_IN_AN_HOUR) + minute
-    @time = Time.at(@time_in_minutes * SECONDS_IN_A_MINUTE)
+    @time = (hour * MINUTES_PER_HOUR) + minute
   end
 
   def hour
-    time.strftime("%H").to_i
+    time / MINUTES_PER_HOUR % HOURS_PER_DAY
   end
 
   def minute
-    time.strftime("%M").to_i
+    time % MINUTES_PER_HOUR
   end
 
   def to_s
-    time.strftime("%H:%M")
+    "#{formatted(hour)}:#{formatted(minute)}"
   end
 
   def +(other)
-    recalculated_new_clock(other, :+)
+    Clock.new(hour: hour + other.hour, minute: minute + other.minute)
   end
 
   def -(other)
-    recalculated_new_clock(other, :-)
+    Clock.new(hour: hour - other.hour, minute: minute - other.minute)
   end
 
   def ==(other)
-    hour == other.hour && minute == other.minute
+    to_s == other.to_s
   end
 
   private
 
-  def recalculated_new_clock(other_clock, operation)
-    total_hours = hour.send(operation.to_sym, other_clock.hour)
-    total_minutes = minute.send(operation.to_sym, other_clock.minute)
-
-    Clock.new(hour: total_hours, minute: total_minutes)
+  def formatted(time)
+    format("%02d", time)
   end
 end
