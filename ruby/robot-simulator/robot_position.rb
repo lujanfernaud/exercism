@@ -42,20 +42,20 @@ class Position
     @y = args[1].to_i
   end
 
-  def change(direction, positions)
-    axis = DIRECTIONS[direction][:axis]
+  def move(bearing, speed)
+    axis = DIRECTIONS[bearing][:axis]
     current_axis_value = send(axis)
-    advance_positions = positions * DIRECTIONS[direction][:multiplier]
+    advance_positions = speed * DIRECTIONS[bearing][:multiplier]
 
     send("#{axis}=", current_axis_value + advance_positions)
   end
 
-  def correct_direction?(direction)
-    DIRECTIONS.key?(direction)
+  def valid_direction?(bearing)
+    DIRECTIONS.key?(bearing)
   end
 
-  def find_direction(direction, side)
-    DIRECTIONS[direction][side]
+  def find_direction(bearing, direction)
+    DIRECTIONS[bearing][direction]
   end
 
   private

@@ -9,18 +9,18 @@ class Robot
     @position = position
   end
 
-  def orient(direction)
-    raise ArgumentError unless position.correct_direction?(direction)
+  def orient(bearing)
+    raise ArgumentError unless position.valid_direction?(bearing)
 
-    @bearing = direction
+    @bearing = bearing
   end
 
   def turn_right
-    @bearing = position.find_direction(bearing, :right)
+    @bearing = turn(:right)
   end
 
   def turn_left
-    @bearing = position.find_direction(bearing, :left)
+    @bearing = turn(:left)
   end
 
   def at(*coordinates)
@@ -28,7 +28,7 @@ class Robot
   end
 
   def advance
-    position.change(bearing, speed)
+    position.move(bearing, speed)
   end
 
   def coordinates
@@ -38,4 +38,8 @@ class Robot
   private
 
   attr_reader :position
+
+  def turn(direction)
+    position.find_direction(bearing, direction)
+  end
 end
