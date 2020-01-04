@@ -3,17 +3,19 @@
 class ListOps
   class << self
     def arrays(input)
-      size = 0
+      result = 0
 
-      input.each { |_item| size += 1 }
+      input.each { |_item| result += 1 }
 
-      size
+      result
     end
 
     def reverser(input)
-      [].tap do |result|
-        input.each { |item| result.unshift(item) }
-      end
+      result = []
+
+      input.each { |item| result.unshift(item) }
+
+      result
     end
 
     def concatter(input1, input2)
@@ -25,15 +27,19 @@ class ListOps
     end
 
     def mapper(input, &block)
-      [].tap do |result|
-        input.each { |item| result << block.call(item) }
-      end
+      result = []
+
+      input.each { |item| result << block.call(item) }
+
+      result
     end
 
     def filterer(input, &block)
-      [].tap do |result|
-        input.each { |item| result << item if block.call(item) }
-      end
+      result = []
+
+      input.each { |item| result << item if block.call(item) }
+
+      result
     end
 
     def sum_reducer(input)
