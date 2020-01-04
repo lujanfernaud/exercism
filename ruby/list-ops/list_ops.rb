@@ -17,7 +17,11 @@ class ListOps
     end
 
     def concatter(input1, input2)
-      input1 + input2
+      result = input1.dup
+
+      input2.each { |item| result << item }
+
+      result
     end
 
     def mapper(input, &block)
