@@ -20,15 +20,15 @@ class ListOps
       input1 + input2
     end
 
-    def mapper(input, &proc)
+    def mapper(input, &block)
       [].tap do |result|
-        input.each { |item| result << proc.call(item) }
+        input.each { |item| result << block.call(item) }
       end
     end
 
-    def filterer(input, &proc)
+    def filterer(input, &block)
       [].tap do |result|
-        input.each { |item| result << item if proc.call(item) }
+        input.each { |item| result << item if block.call(item) }
       end
     end
 
