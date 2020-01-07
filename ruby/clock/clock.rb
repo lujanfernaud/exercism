@@ -12,24 +12,16 @@ class Clock
     @time = ((hour * MINUTES_PER_HOUR) + minute) % MINUTES_PER_DAY
   end
 
-  def hour
-    time / MINUTES_PER_HOUR
-  end
-
-  def minute
-    time % MINUTES_PER_HOUR
-  end
-
   def to_s
-    "#{formatted(hour)}:#{formatted(minute)}"
+    "#{formatted_hour}:#{formatted_minute}"
   end
 
   def +(other)
-    self.class.new(hour: hour + other.hour, minute: minute + other.minute)
+    self.class.new(minute: time + other.time)
   end
 
   def -(other)
-    self.class.new(hour: hour - other.hour, minute: minute - other.minute)
+    self.class.new(minute: time - other.time)
   end
 
   def ==(other)
@@ -37,6 +29,14 @@ class Clock
   end
 
   private
+
+  def formatted_hour
+    formatted(time / MINUTES_PER_HOUR)
+  end
+
+  def formatted_minute
+    formatted(time % MINUTES_PER_HOUR)
+  end
 
   def formatted(time)
     format("%02d", time)
