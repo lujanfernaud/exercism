@@ -9,11 +9,11 @@ class Clock
   MINUTES_PER_DAY = MINUTES_PER_HOUR * HOURS_PER_DAY
 
   def initialize(hour: 0, minute: 0)
-    @time = (hour * MINUTES_PER_HOUR) + minute
+    @time = ((hour * MINUTES_PER_HOUR) + minute) % MINUTES_PER_DAY
   end
 
   def hour
-    time / MINUTES_PER_HOUR % HOURS_PER_DAY
+    time / MINUTES_PER_HOUR
   end
 
   def minute
@@ -25,15 +25,15 @@ class Clock
   end
 
   def +(other)
-    Clock.new(hour: hour + other.hour, minute: minute + other.minute)
+    self.class.new(hour: hour + other.hour, minute: minute + other.minute)
   end
 
   def -(other)
-    Clock.new(hour: hour - other.hour, minute: minute - other.minute)
+    self.class.new(hour: hour - other.hour, minute: minute - other.minute)
   end
 
   def ==(other)
-    to_s == other.to_s
+    time == other.time
   end
 
   private
