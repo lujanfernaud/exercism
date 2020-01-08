@@ -5,7 +5,7 @@ class ListOps
     def arrays(input)
       result = 0
 
-      input.each { |_item| result += 1 }
+      to_array(input).each { result += 1 }
 
       result
     end
@@ -13,15 +13,15 @@ class ListOps
     def reverser(input)
       result = []
 
-      input.each { |item| result.unshift(item) }
+      to_array(input).each { |item| result.unshift(item) }
 
       result
     end
 
     def concatter(input1, input2)
-      result = input1.dup
+      result = to_array(input1).dup
 
-      input2.each { |item| result << item }
+      to_array(input2).each { |item| result << item }
 
       result
     end
@@ -29,7 +29,7 @@ class ListOps
     def mapper(input, &block)
       result = []
 
-      input.each { |item| result << block.call(item) }
+      to_array(input).each { |item| result << block.call(item) }
 
       result
     end
@@ -37,7 +37,7 @@ class ListOps
     def filterer(input, &block)
       result = []
 
-      input.each { |item| result << item if block.call(item) }
+      to_array(input).each { |item| result << item if block.call(item) }
 
       result
     end
@@ -45,7 +45,7 @@ class ListOps
     def sum_reducer(input)
       result = 0
 
-      input.each { |item| result += item }
+      to_array(input).each { |item| result += item }
 
       result
     end
@@ -53,9 +53,15 @@ class ListOps
     def factorial_reducer(input)
       result = 1
 
-      input.each { |item| result *= item }
+      to_array(input).each { |item| result *= item }
 
       result
+    end
+
+    private
+
+    def to_array(input)
+      [input].flatten
     end
   end
 end
