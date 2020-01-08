@@ -3,7 +3,6 @@
 class Clock
   attr_reader :time
 
-  SECONDS_PER_MINUTE = 60
   MINUTES_PER_HOUR = 60
   HOURS_PER_DAY = 24
   MINUTES_PER_DAY = MINUTES_PER_HOUR * HOURS_PER_DAY
@@ -31,14 +30,10 @@ class Clock
   private
 
   def formatted_hour
-    formatted(time / MINUTES_PER_HOUR)
+    format("%<hour>02d", hour: time / MINUTES_PER_HOUR)
   end
 
   def formatted_minute
-    formatted(time % MINUTES_PER_HOUR)
-  end
-
-  def formatted(time)
-    format("%02d", time)
+    format("%<minute>02d", minute: time % MINUTES_PER_HOUR)
   end
 end
