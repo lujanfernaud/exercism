@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Clock
-  attr_reader :time
+  attr_reader :time_in_minutes
 
   MINUTES_PER_HOUR = 60
   HOURS_PER_DAY = 24
@@ -9,7 +9,7 @@ class Clock
   TIME_FORMAT = "%02d:%02d"
 
   def initialize(hour: 0, minute: 0)
-    @time = ((hour * MINUTES_PER_HOUR) + minute) % MINUTES_PER_DAY
+    @time_in_minutes = ((hour * MINUTES_PER_HOUR) + minute) % MINUTES_PER_DAY
   end
 
   def to_s(time_format = TIME_FORMAT)
@@ -17,24 +17,24 @@ class Clock
   end
 
   def +(other)
-    self.class.new(minute: time + other.time)
+    self.class.new(minute: time_in_minutes + other.time_in_minutes)
   end
 
   def -(other)
-    self.class.new(minute: time - other.time)
+    self.class.new(minute: time_in_minutes - other.time_in_minutes)
   end
 
   def ==(other)
-    time == other.time
+    time_in_minutes == other.time_in_minutes
   end
 
   private
 
   def hour
-    time / MINUTES_PER_HOUR
+    time_in_minutes / MINUTES_PER_HOUR
   end
 
   def minute
-    time % MINUTES_PER_HOUR
+    time_in_minutes % MINUTES_PER_HOUR
   end
 end
