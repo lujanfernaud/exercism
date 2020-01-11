@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 class Clock
-  attr_reader :time_in_minutes
-
   MINUTES_PER_HOUR = 60
   HOURS_PER_DAY = 24
   MINUTES_PER_DAY = MINUTES_PER_HOUR * HOURS_PER_DAY
@@ -27,6 +25,10 @@ class Clock
   def ==(other)
     time_in_minutes == other.time_in_minutes
   end
+
+  protected
+
+  attr_reader :time_in_minutes
 
   private
 
