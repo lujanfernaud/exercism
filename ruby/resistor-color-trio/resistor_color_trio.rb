@@ -26,11 +26,15 @@ class ResistorColorTrio
   end
 
   def value_with_type
-    value > 1000 ? "#{value / 1000} kiloohms" : "#{value} ohms"
+    value
+      .sub(/0{9}$/, " giga")
+      .sub(/0{6}$/, " mega")
+      .sub(/0{3}$/, " kilo")
+      .sub(/(\d)$/, "\\1 ") + "ohms"
   end
 
   def value
-    @value ||= coded_colors[0..1].join.to_i * 10**coded_colors[2].to_i
+    @value ||= (coded_colors[0..1].join.to_i * 10**coded_colors[2].to_i).to_s
   end
 
   def coded_colors
