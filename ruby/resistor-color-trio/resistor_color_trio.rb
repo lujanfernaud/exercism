@@ -11,7 +11,7 @@ class ResistorColorTrio
   def label
     raise(*invalid_color_error) unless invalid_color.empty?
 
-    "Resistor value: #{stripped_value} #{type}"
+    "Resistor value: #{value_with_type}"
   end
 
   private
@@ -26,23 +26,11 @@ class ResistorColorTrio
     @invalid_color ||= colors - COLORS
   end
 
-  def stripped_value
-    value.reverse.scan(/\d{1,3}/).reverse.shift.reverse
+  def value_with_type
+    value > 1000 ? "#{value / 1000} kiloohms" : "#{value} ohms"
   end
 
   def value
-    @value ||= "#{main_value}#{zeros}"
-  end
-
-  def main_value
-    coded_colors[0..1].join
-  end
-
-  def zeros
-    (10**coded_colors[2].to_i).to_s[1..-1]
-  end
-
-  def type
-    value.length > 3 ? "kiloohms" : "ohms"
+    @value ||= coded_colors[0..1].join.to_i * 10**coded_colors[2].to_i
   end
 end
