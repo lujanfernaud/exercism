@@ -5,7 +5,6 @@ class ResistorColorTrio
 
   def initialize(colors)
     @colors = [colors].flatten
-    @coded_colors = @colors.map { |color| COLORS.index(color.downcase) }
   end
 
   def label
@@ -16,7 +15,7 @@ class ResistorColorTrio
 
   private
 
-  attr_reader :colors, :coded_colors
+  attr_reader :colors
 
   def invalid_color_error
     [ArgumentError, "Not a valid color: #{invalid_color}"]
@@ -32,5 +31,9 @@ class ResistorColorTrio
 
   def value
     @value ||= coded_colors[0..1].join.to_i * 10**coded_colors[2].to_i
+  end
+
+  def coded_colors
+    @coded_colors ||= colors.map { |color| COLORS.index(color.downcase) }
   end
 end
