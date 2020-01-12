@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
-require_relative "resistor_colors"
-
 class ResistorColorTrio
+  COLORS = %w[black brown red orange yellow green blue violet grey white].freeze
+
   def initialize(colors)
     @colors = [colors].flatten
-    @coded_colors = ResistorColors.coded(@colors)
+    @coded_colors = @colors.map { |color| COLORS.index(color.downcase) }
   end
 
   def label
@@ -23,7 +23,7 @@ class ResistorColorTrio
   end
 
   def invalid_color
-    @invalid_color ||= colors - ResistorColors::COLORS
+    @invalid_color ||= colors - COLORS
   end
 
   def stripped_value
@@ -39,11 +39,7 @@ class ResistorColorTrio
   end
 
   def zeros
-    zeros = coded_colors[2]
-
-    return unless zeros
-
-    format("%0#{zeros}d", 0)
+    (10**coded_colors[2].to_i).to_s[1..-1]
   end
 
   def type
