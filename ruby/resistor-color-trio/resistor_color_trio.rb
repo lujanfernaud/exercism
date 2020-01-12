@@ -1,10 +1,11 @@
 # frozen_string_literal: true
 
-class ResistorColorTrio
-  COLORS = %w[black brown red orange yellow green blue violet grey white].freeze
+require_relative "resistor_colors"
 
+class ResistorColorTrio
   def initialize(colors)
     @colors = [colors].flatten
+    @coded_colors = ResistorColors.coded(@colors)
   end
 
   def label
@@ -15,14 +16,14 @@ class ResistorColorTrio
 
   private
 
-  attr_reader :colors
+  attr_reader :colors, :coded_colors
 
   def invalid_color_error
     [ArgumentError, "Not a valid color: #{invalid_color}"]
   end
 
   def invalid_color
-    @invalid_color ||= colors - COLORS
+    @invalid_color ||= colors - ResistorColors::COLORS
   end
 
   def stripped_value
@@ -35,20 +36,6 @@ class ResistorColorTrio
 
   def main_value
     coded_colors[0..1].join
-  end
-
-  def coded_colors
-    @coded_colors ||= selected_colors.map(&method(:color_code))
-  end
-
-  def selected_colors
-    last_color = colors.last(1).keep_if { |color| color != "black" }
-
-    colors[0..1] + last_color
-  end
-
-  def color_code(color)
-    COLORS.index(color.downcase)
   end
 
   def zeros
