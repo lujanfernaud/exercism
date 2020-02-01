@@ -14,7 +14,6 @@ module TwelveDays
       @result << Day.new(number).to_s
       @result << Gifts.new(number).to_s
       @result << "."
-      @result << "\n" if last_verse?
 
       @result.join
     end
@@ -22,9 +21,5 @@ module TwelveDays
     private
 
     attr_reader :number
-
-    def last_verse?
-      number == VERSES
-    end
   end
 end
