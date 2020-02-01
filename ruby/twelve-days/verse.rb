@@ -5,21 +5,28 @@ require_relative "gifts"
 
 module TwelveDays
   class Verse
-    def initialize(number)
-      @number = number + 1
-      @result = []
+    def self.prepare(number)
+      new(number).prepare
     end
 
-    def to_s
-      @result << Day.new(number).to_s
-      @result << Gifts.new(number).to_s
-      @result << "."
+    def initialize(number)
+      @number = number + 1
+    end
 
-      @result.join
+    def prepare
+      day + gifts + "."
     end
 
     private
 
     attr_reader :number
+
+    def day
+      @day ||= Day.new(number).to_s
+    end
+
+    def gifts
+      @gifts ||= Gifts.new(number).to_s
+    end
   end
 end

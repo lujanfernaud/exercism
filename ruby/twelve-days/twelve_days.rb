@@ -6,6 +6,6 @@ module TwelveDays
   VERSES = 12
 
   def self.song
-    VERSES.times.map { |number| Verse.new(number).to_s }.join("\n\n") + "\n"
+    VERSES.times.map { |number| Verse.prepare(number) }.join("\n\n") + "\n"
   end
 end
