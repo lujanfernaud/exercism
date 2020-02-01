@@ -23,7 +23,7 @@ module TwelveDays
       end
 
       def to_s
-        gifts[-1] = "and #{gifts[-1]}" if gifts.size > 1
+        gifts[-1] = "and #{gifts[-1]}" if more_than_one_gift?
 
         gifts.join(", ")
       end
@@ -34,6 +34,10 @@ module TwelveDays
 
       def gifts
         @gifts ||= GIFTS[0..number].reverse
+      end
+
+      def more_than_one_gift?
+        gifts.size > 1
       end
     end
   end
