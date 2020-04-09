@@ -9,15 +9,11 @@ defmodule RnaTranscription do
   """
 
   def to_rna(dna) do
-    dna
-    |> Enum.chunk_every(1)
-    |> Enum.map(&dna_to_rna/1)
-    |> Enum.join()
-    |> String.to_charlist()
+    dna |> Enum.map(&dna_to_rna(&1))
   end
 
-  defp dna_to_rna(_dna = 'G'), do: 'C'
-  defp dna_to_rna(_dna = 'C'), do: 'G'
-  defp dna_to_rna(_dna = 'T'), do: 'A'
-  defp dna_to_rna(_dna = 'A'), do: 'U'
+  defp dna_to_rna(_dna = ?G), do: ?C
+  defp dna_to_rna(_dna = ?C), do: ?G
+  defp dna_to_rna(_dna = ?T), do: ?A
+  defp dna_to_rna(_dna = ?A), do: ?U
 end
