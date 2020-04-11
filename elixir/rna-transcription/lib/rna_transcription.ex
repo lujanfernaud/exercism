@@ -8,12 +8,13 @@ defmodule RnaTranscription do
   'UGAC'
   """
 
+  @spec to_rna(charlist()) :: charlist()
   def to_rna(dna) do
-    dna |> Enum.map(&dna_to_rna(&1))
+    dna |> Enum.map(&dna_to_rna/1)
   end
 
-  defp dna_to_rna(_dna = ?G), do: ?C
-  defp dna_to_rna(_dna = ?C), do: ?G
-  defp dna_to_rna(_dna = ?T), do: ?A
-  defp dna_to_rna(_dna = ?A), do: ?U
+  defp dna_to_rna(?G), do: ?C
+  defp dna_to_rna(?C), do: ?G
+  defp dna_to_rna(?T), do: ?A
+  defp dna_to_rna(?A), do: ?U
 end
