@@ -1,5 +1,5 @@
 defmodule WordCount do
-  @non_word_characters_regexp ~r/[^-a-z0-9\p{L}]|^_/u
+  @non_word_characters_regexp ~r/[^-0-9\p{L}]|_/u
 
   @doc """
   Count the number of words in the sentence.
