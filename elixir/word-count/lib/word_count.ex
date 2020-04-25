@@ -9,18 +9,12 @@ defmodule WordCount do
   @spec count(String.t()) :: map
   def count(sentence) do
     sentence
-    |> split_into_words()
-    |> Enum.reduce(%{}, &count_word(&1, &2))
-  end
-
-  defp split_into_words(sentence) do
-    sentence
     |> String.downcase()
-    |> String.replace(@non_word_characters_regexp, " ")
-    |> String.split()
+    |> String.split(@non_word_characters_regexp, trim: true)
+    |> Enum.reduce(%{}, &word_with_count(&1, &2))
   end
 
-  defp count_word(word, acc) do
+  defp word_with_count(word, acc) do
     Map.update(acc, word, 1, fn count -> count + 1 end)
   end
 end
