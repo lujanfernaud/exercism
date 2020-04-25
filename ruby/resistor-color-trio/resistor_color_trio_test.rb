@@ -47,4 +47,11 @@ class ResistorColorTrioTest < Minitest::Test
       ResistorColorTrio.new(%w[yellow purple black]).label
     end
   end
+
+  # Added to test that the incorrect color is returned.
+  def test_invalid_color_message
+    assert_raises(ArgumentError) do
+      ResistorColorTrio.new(%w[yellow purple black]).label
+    end
+  end
 end
