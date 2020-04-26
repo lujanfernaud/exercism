@@ -1,5 +1,5 @@
 defmodule Pangram do
-  @alphabet "abcdefghijklmnopqrstuvwxyz"
+  @alphabet Enum.to_list(?a..?z)
 
   @doc """
   Determines if a word or sentence is a pangram.
@@ -15,19 +15,9 @@ defmodule Pangram do
   """
 
   @spec pangram?(String.t()) :: boolean
-  def pangram?(""), do: false
-
   def pangram?(sentence) do
-    sorted_unique_letters_in(sentence) == @alphabet
+    (@alphabet -- characters_in(sentence)) |> Enum.empty?()
   end
 
-  defp sorted_unique_letters_in(sentence) do
-    sentence
-    |> String.downcase()
-    |> String.codepoints()
-    |> Enum.uniq()
-    |> Enum.filter(&String.match?(&1, ~r{[a-z]}))
-    |> Enum.sort()
-    |> Enum.join()
-  end
+  def characters_in(sentence), do: to_charlist(String.downcase(sentence))
 end
