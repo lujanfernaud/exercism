@@ -17,8 +17,6 @@ defmodule Accumulate do
 
   @spec accumulate(list, (any -> any)) :: list
   def accumulate(list, fun) do
-    for x <- list do
-      x |> (&fun.(&1)).()
-    end
+    for x <- list, do: fun.(x)
   end
 end
