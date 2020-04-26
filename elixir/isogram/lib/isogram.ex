@@ -7,16 +7,14 @@ defmodule Isogram do
     sentence
     |> valid_characters_to_list()
     |> Enum.uniq()
-    |> unique_characters?(sentence)
+    |> same_characters?(sentence)
   end
 
   defp valid_characters_to_list(sentence) do
-    sentence
-    |> String.replace(~r{\W}, "")
-    |> String.split("", trim: true)
+    Regex.scan(~r{\w}, sentence)
   end
 
-  defp unique_characters?(valid_characters, sentence) do
-    Enum.count(valid_characters) == valid_characters_to_list(sentence) |> Enum.count()
+  defp same_characters?(valid_unique_characters, sentence) do
+    valid_unique_characters == valid_characters_to_list(sentence)
   end
 end
