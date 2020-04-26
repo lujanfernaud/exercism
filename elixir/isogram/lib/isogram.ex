@@ -4,17 +4,8 @@ defmodule Isogram do
   """
   @spec isogram?(String.t()) :: boolean
   def isogram?(sentence) do
-    sentence
-    |> valid_characters_to_list()
-    |> Enum.uniq()
-    |> same_characters?(sentence)
-  end
+    characters = Regex.scan(~r{\w}, sentence)
 
-  defp valid_characters_to_list(sentence) do
-    Regex.scan(~r{\w}, sentence)
-  end
-
-  defp same_characters?(valid_unique_characters, sentence) do
-    valid_unique_characters == valid_characters_to_list(sentence)
+    characters == Enum.uniq(characters)
   end
 end
