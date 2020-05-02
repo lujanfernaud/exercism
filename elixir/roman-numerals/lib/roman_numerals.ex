@@ -25,13 +25,13 @@ defmodule RomanNumerals do
     |> Enum.reverse()
   end
 
+  defp prepare_decimal({number, multiplier}), do: number * multiplier
+
   defp convert_to_roman_numeral(number_list) do
     number_list
     |> Enum.map(&to_roman/1)
     |> Enum.join()
   end
-
-  defp prepare_decimal({number, multiplier}), do: number * multiplier
 
   defp to_roman(0), do: ""
   defp to_roman(1), do: "I"
