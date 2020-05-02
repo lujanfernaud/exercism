@@ -19,17 +19,14 @@ defmodule RomanNumerals do
   defp convert_to_roman_numeral(number_list) do
     number_list
     |> Enum.reverse()
-    |> Enum.with_index(1)
+    |> Enum.zip([1, 10, 100, 1000])
     |> Enum.map(&prepare_decimal/1)
     |> Enum.reverse()
     |> Enum.map(&to_roman/1)
     |> Enum.join()
   end
 
-  defp prepare_decimal({number, _index = 1}), do: number
-  defp prepare_decimal({number, _index = 2}), do: number * 10
-  defp prepare_decimal({number, _index = 3}), do: number * 100
-  defp prepare_decimal({number, _index = 4}), do: number * 1000
+  defp prepare_decimal({number, multiplier}), do: number * multiplier
 
   defp to_roman(0), do: ""
   defp to_roman(1), do: "I"
