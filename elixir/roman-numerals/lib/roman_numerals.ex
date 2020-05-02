@@ -6,6 +6,7 @@ defmodule RomanNumerals do
   def numeral(number) do
     number
     |> convert_to_list()
+    |> prepare_decimals()
     |> convert_to_roman_numeral()
   end
 
@@ -16,12 +17,16 @@ defmodule RomanNumerals do
     |> Enum.map(&String.to_integer/1)
   end
 
-  defp convert_to_roman_numeral(number_list) do
+  defp prepare_decimals(number_list) do
     number_list
     |> Enum.reverse()
     |> Enum.zip([1, 10, 100, 1000])
     |> Enum.map(&prepare_decimal/1)
     |> Enum.reverse()
+  end
+
+  defp convert_to_roman_numeral(number_list) do
+    number_list
     |> Enum.map(&to_roman/1)
     |> Enum.join()
   end
