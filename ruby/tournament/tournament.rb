@@ -30,12 +30,13 @@ class Tournament
     end
 
     def calculate_teams_data(matches)
+      # Data.new(matches).build
+
+      valid_matches = matches.select(&:valid?)
       initial_team_data = { played: 0, won: 0, drawn: 0, lost: 0, points: 0 }
 
       {}.tap do |result|
-        matches.each_with_index do |match, _index|
-          next if match.to_a.any?(&:nil?)
-
+        valid_matches.each do |match|
           unless result.keys.include?(match.team_one)
             result[match.team_one] = OpenStruct.new(initial_team_data.merge(name: match.team_one))
           end
@@ -44,14 +45,15 @@ class Tournament
             result[match.team_two] = OpenStruct.new(initial_team_data.merge(name: match.team_two))
           end
 
-          result[match.team_one][:played] += 1
-          result[match.team_two][:played] += 1
+          match.teams.each do |team|
+            result[team][:played] += 1
+          end
 
           if match.draw?
-            result[match.team_one][:drawn] += 1
-            result[match.team_one][:points] += 1
-            result[match.team_two][:drawn] += 1
-            result[match.team_two][:points] += 1
+            match.teams.each do |team|
+              result[team][:drawn] += 1
+              result[team][:points] += 1
+            end
           else
             result[match.winner][:won] += 1
             result[match.winner][:points] += 3
@@ -64,6 +66,50 @@ class Tournament
   end
 end
 
+# class Data
+#   def initiatize(matches)
+#     @matches = matches
+#     @result = {}
+#   end
+
+#   def build
+#     matches.each do |match|
+#       next if match.to_a.any?(&:nil?)
+
+#       unless result.keys.include?(match.team_one)
+#         result[match.team_one] = OpenStruct.new(initial_team_data.merge(name: match.team_one))
+#       end
+
+#       unless result.keys.include?(match.team_two)
+#         result[match.team_two] = OpenStruct.new(initial_team_data.merge(name: match.team_two))
+#       end
+
+#       result[match.team_one][:played] += 1
+#       result[match.team_two][:played] += 1
+
+#       if match.draw?
+#         result[match.team_one][:drawn] += 1
+#         result[match.team_one][:points] += 1
+#         result[match.team_two][:drawn] += 1
+#         result[match.team_two][:points] += 1
+#       else
+#         result[match.winner][:won] += 1
+#         result[match.winner][:points] += 3
+#         result[match.loser][:lost] += 1
+#         result[match.loser][:points] += 0
+#       end
+#     end
+#   end
+
+#   private
+
+#   attr_reader :matches
+
+#   def initial_team_data
+#     { played: 0, won: 0, drawn: 0, lost: 0, points: 0 }
+#   end
+# end
+
 class Match
   attr_reader :team_one, :team_two, :result
 
@@ -71,6 +117,18 @@ class Match
     @team_one = team_one
     @team_two = team_two
     @result = result
+  end
+
+  def valid?
+    to_a.none?(&:nil?)
+  end
+
+  def to_a
+    [team_one, team_two, result]
+  end
+
+  def teams
+    [team_one, team_two]
   end
 
   def draw?
@@ -89,10 +147,6 @@ class Match
     when "loss" then team_one
     when "win" then team_two
     end
-  end
-
-  def to_a
-    [team_one, team_two, result]
   end
 end
 
