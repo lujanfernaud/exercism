@@ -6,9 +6,9 @@ class Tournament
   class << self
     def tally(input)
       matches = create_matches(input)
-      teams_data = calculate_teams_data(matches)
+      tally = Tally.new(matches.select(&:valid?)).build
 
-      Table.new(teams_data).build
+      Table.new(tally).build
     end
 
     private
@@ -28,95 +28,47 @@ class Tournament
         end
       end
     end
-
-    def calculate_teams_data(matches)
-      # Data.new(matches).build
-
-      valid_matches = matches.select(&:valid?)
-      initial_team_data = { played: 0, won: 0, drawn: 0, lost: 0, points: 0 }
-
-      {}.tap do |result|
-        valid_matches.each do |match|
-          unless result.keys.include?(match.team_one)
-            result[match.team_one] = OpenStruct.new(initial_team_data.merge(name: match.team_one))
-          end
-
-          unless result.keys.include?(match.team_two)
-            result[match.team_two] = OpenStruct.new(initial_team_data.merge(name: match.team_two))
-          end
-
-          match.teams.each do |team|
-            result[team][:played] += 1
-          end
-
-          if match.draw?
-            match.teams.each do |team|
-              result[team][:drawn] += 1
-              result[team][:points] += 1
-            end
-          else
-            result[match.winner][:won] += 1
-            result[match.winner][:points] += 3
-            result[match.loser][:lost] += 1
-            result[match.loser][:points] += 0
-          end
-        end
-      end
-    end
   end
 end
 
-# class Data
-#   def initiatize(matches)
-#     @matches = matches
-#     @result = {}
-#   end
+class Tally
+  def initialize(matches)
+    @matches = matches
+    @result = {}
+  end
 
-#   def build
-#     matches.each do |match|
-#       next if match.to_a.any?(&:nil?)
+  def build
+    matches.each_with_object({}) do |match, result|
+      match.teams.each do |team|
+        unless result.keys.include?(team.name)
+          result[team.name] = team.to_h
+          next
+        end
 
-#       unless result.keys.include?(match.team_one)
-#         result[match.team_one] = OpenStruct.new(initial_team_data.merge(name: match.team_one))
-#       end
+        match_attributes = result[team.name].reject { |key, _value| key == :name }
+        updated_match_attributes = match_attributes.map { |key, value| [key, value + team.to_h[key]] }.to_h
+        updated_team_data = updated_match_attributes.merge(name: team.name)
 
-#       unless result.keys.include?(match.team_two)
-#         result[match.team_two] = OpenStruct.new(initial_team_data.merge(name: match.team_two))
-#       end
+        result[team.name] = updated_team_data
+      end
+    end
+  end
 
-#       result[match.team_one][:played] += 1
-#       result[match.team_two][:played] += 1
+  private
 
-#       if match.draw?
-#         result[match.team_one][:drawn] += 1
-#         result[match.team_one][:points] += 1
-#         result[match.team_two][:drawn] += 1
-#         result[match.team_two][:points] += 1
-#       else
-#         result[match.winner][:won] += 1
-#         result[match.winner][:points] += 3
-#         result[match.loser][:lost] += 1
-#         result[match.loser][:points] += 0
-#       end
-#     end
-#   end
-
-#   private
-
-#   attr_reader :matches
-
-#   def initial_team_data
-#     { played: 0, won: 0, drawn: 0, lost: 0, points: 0 }
-#   end
-# end
+  attr_reader :matches
+  attr_writer :result
+end
 
 class Match
   attr_reader :team_one, :team_two, :result
 
   def initialize(team_one:, team_two:, result:)
-    @team_one = team_one
-    @team_two = team_two
+    @team_one = Match::Team.new(name: team_one)
+    @team_two = Match::Team.new(name: team_two)
     @result = result
+
+    calculate_teams_data if valid?
   end
 
   def valid?
@@ -125,6 +77,13 @@ class Match
 
   def to_a
     [team_one, team_two, result]
+  end
+
+  def teams_data
+    {
+      team_one => team_one.to_h,
+      team_two => team_two.to_h
+    }
   end
 
   def teams
@@ -147,6 +106,62 @@ class Match
     when "loss" then team_one
     when "win" then team_two
     end
+  end
+
+  private
+
+  def calculate_teams_data
+    teams.each(&:played)
+
+    return teams.each(&:drawn) if draw?
+
+    winner.won
+    loser.lost
+  end
+end
+
+class Match::Team
+  attr_reader :name, :points
+
+  # ATTRIBUTES = []
+
+  def initialize(name:)
+    @name = name
+    @played = 0
+    @won = 0
+    @drawn = 0
+    @lost = 0
+    @points = 0
+  end
+
+  def to_h
+    {
+      name: @name,
+      played: @played,
+      won: @won,
+      drawn: @drawn,
+      lost: @lost,
+      points: @points
+    }
+  end
+
+  def played
+    @played = 1
+  end
+
+  def won
+    @won = 1
+    @points = 3
+  end
+
+  def drawn
+    @drawn = 1
+    @points = 1
+  end
+
+  def lost
+    @lost = 1
+    @points = 0
   end
 end
 
@@ -199,9 +214,9 @@ class Table
   end
 
   def sorted_team_data
-    sorted_data = teams_data.sort_by { |team| team[1].name }.reverse
+    sorted_data = teams_data.sort_by { |team| team[1][:name] }.reverse
 
-    sorted_data.sort_by { |team| team[1].points }.reverse
+    sorted_data.sort_by { |team| team[1][:points] }.reverse
   end
 
   def format_result
