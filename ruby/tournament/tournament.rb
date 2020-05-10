@@ -11,7 +11,7 @@ class Tournament
 
   class << self
     def tally(input)
-      parsed_input = parse(input)
+      parsed_input = Parser.new(input).parse
       matches = create_matches(parsed_input)
       tally = Tally.new(matches).build
 
@@ -20,14 +20,6 @@ class Tournament
 
     private
 
-    def parse(input)
-      input.each_line(chomp: true).map do |line|
-        match_data = line.split(";")
-
-        %i[team_one team_two result].zip(match_data).to_h
-      end
-    end
-
     def create_matches(parsed_input)
       parsed_input.map do |match_data|
         Match.new(
@@ -35,9 +27,36 @@ class Tournament
           team_two: match_data[:team_two],
           result: match_data[:result]
         )
-      end.select(&:valid?)
+      end
     end
   end
+end
+
+class Parser
+  RESULT_STATUS = {
+    win: { winner: :team_one, loser: :team_two },
+    loss: { loser: :team_one, winner: :team_two },
+    draw: :draw
+  }.freeze
+
+  def initialize(input)
+    @input = input.each_line(chomp: true)
+  end
+
+  def parse
+    input.map do |line|
+      next if line.empty?
+
+      team_one, team_two, result = line.split(";")
+      result = RESULT_STATUS[result.to_sym]
+
+      { team_one: team_one, team_two: team_two, result: result }
+    end.compact
+  end
+
+  private
+
+  attr_reader :input
 end
 
 class Match
@@ -48,45 +67,28 @@ class Match
     @team_two = Team.new(name: team_two)
     @result = result
 
-    set_teams_data if valid?
-  end
-
-  def valid?
-    [team_one, team_two, result].none?(&:nil?)
+    set_teams_data
   end
 
   def teams
     [team_one, team_two]
   end
 
-  private
-
-  def set_teams_data
-    return teams.each(&:mark_drawn) if result == "draw"
-
-    winner.mark_won
-    loser.mark_lost
-  end
-
   def winner
-    status[result.to_sym][:winner]
+    send(result[:winner])
   end
 
   def loser
-    status[result.to_sym][:loser]
+    send(result[:loser])
   end
 
-  def status
-    {
-      win: {
-        winner: team_one,
-        loser: team_two
-      },
-      loss: {
-        loser: team_one,
-        winner: team_two
-      }
-    }
+  private
+
+  def set_teams_data
+    return teams.each(&:mark_drawn) if result == :draw
+
+    winner.mark_won
+    loser.mark_lost
   end
 end
 
