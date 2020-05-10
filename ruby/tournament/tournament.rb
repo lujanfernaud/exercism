@@ -3,6 +3,12 @@
 require "pry"
 
 class Tournament
+  POINTS = {
+    won: 3,
+    drawn: 1,
+    lost: 0
+  }.freeze
+
   class << self
     def tally(input)
       matches = create_matches(input)
@@ -111,8 +117,6 @@ class Match
   private
 
   def calculate_teams_data
-    teams.each(&:played)
-
     return teams.each(&:drawn) if draw?
 
     winner.won
@@ -123,11 +127,9 @@ end
 class Match::Team
   attr_reader :name, :points
 
-  # ATTRIBUTES = []
-
-  def initialize(name:)
+  def initialize(name:, played: 1)
     @name = name
-    @played = 0
+    @played = played
     @won = 0
     @drawn = 0
     @lost = 0
@@ -145,23 +147,19 @@ class Match::Team
     }
   end
 
-  def played
-    @played = 1
-  end
-
   def won
     @won = 1
-    @points = 3
+    @points = Tournament::POINTS[:won]
   end
 
   def drawn
     @drawn = 1
-    @points = 1
+    @points = Tournament::POINTS[:drawn]
   end
 
   def lost
     @lost = 1
-    @points = 0
+    @points = Tournament::POINTS[:lost]
   end
 end
 
