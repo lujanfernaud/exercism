@@ -11,93 +11,61 @@ class Tournament
 
   class << self
     def tally(input)
-      matches = create_matches(input)
-      tally = Tally.new(matches.select(&:valid?)).build
+      parsed_input = parse(input)
+      matches = create_matches(parsed_input)
+      tally = Tally.new(matches).build
 
       Table.new(tally).build
     end
 
     private
 
-    def create_matches(input)
-      [].tap do |matches|
-        input.each_line(chomp: true) do |line|
-          team_one, team_two, result = line.split(";")
+    def parse(input)
+      input.each_line(chomp: true).map do |line|
+        match_data = line.split(";")
 
-          match = Match.new(
-            team_one: team_one,
-            team_two: team_two,
-            result: result
-          )
-
-          matches << match
-        end
+        %i[team_one team_two result].zip(match_data).to_h
       end
     end
-  end
-end
 
-class Tally
-  def initialize(matches)
-    @matches = matches
-    @result = {}
-  end
-
-  def build
-    matches.each_with_object({}) do |match, result|
-      match.teams.each do |team|
-        unless result.keys.include?(team.name)
-          result[team.name] = team.to_h
-          next
-        end
-
-        match_attributes = result[team.name].reject { |key, _value| key == :name }
-        updated_match_attributes = match_attributes.map { |key, value| [key, value + team.to_h[key]] }.to_h
-        updated_team_data = updated_match_attributes.merge(name: team.name)
-
-        result[team.name] = updated_team_data
-      end
+    def create_matches(parsed_input)
+      parsed_input.map do |match_data|
+        Match.new(
+          team_one: match_data[:team_one],
+          team_two: match_data[:team_two],
+          result: match_data[:result]
+        )
+      end.select(&:valid?)
     end
   end
-
-  private
-
-  attr_reader :matches
-  attr_writer :result
 end
 
 class Match
   attr_reader :team_one, :team_two, :result
 
   def initialize(team_one:, team_two:, result:)
-    @team_one = Match::Team.new(name: team_one)
-    @team_two = Match::Team.new(name: team_two)
+    @team_one = Team.new(name: team_one)
+    @team_two = Team.new(name: team_two)
     @result = result
 
-    calculate_teams_data if valid?
+    set_teams_data if valid?
   end
 
   def valid?
-    to_a.none?(&:nil?)
-  end
-
-  def to_a
-    [team_one, team_two, result]
-  end
-
-  def teams_data
-    {
-      team_one => team_one.to_h,
-      team_two => team_two.to_h
-    }
+    [team_one, team_two, result].none?(&:nil?)
   end
 
   def teams
     [team_one, team_two]
   end
 
-  def draw?
-    @result == "draw"
+  private
+
+  def set_teams_data
+    return teams.each(&:drawn) if result == "draw"
+
+    winner.won
+    loser.lost
   end
 
   def winner
@@ -113,19 +81,10 @@ class Match
     when "win" then team_two
     end
   end
-
-  private
-
-  def calculate_teams_data
-    return teams.each(&:drawn) if draw?
-
-    winner.won
-    loser.lost
-  end
 end
 
 class Match::Team
-  attr_reader :name, :points
+  attr_reader :name
 
   def initialize(name:, played: 1)
     @name = name
@@ -161,6 +120,35 @@ class Match::Team
     @lost = 1
     @points = Tournament::POINTS[:lost]
   end
+end
+
+class Tally
+  def initialize(matches)
+    @matches = matches
+    @result = {}
+  end
+
+  def build
+    matches.each_with_object({}) do |match, result|
+      match.teams.each do |team|
+        unless result.keys.include?(team.name)
+          result[team.name] = team.to_h
+          next
+        end
+
+        match_attributes = result[team.name].reject { |key, _value| key == :name }
+        updated_match_attributes = match_attributes.map { |key, value| [key, value + team.to_h[key]] }.to_h
+        updated_team_data = updated_match_attributes.merge(name: team.name)
+
+        result[team.name] = updated_team_data
+      end
+    end
+  end
+
+  private
+
+  attr_reader :matches
+  attr_writer :result
 end
 
 class Table
