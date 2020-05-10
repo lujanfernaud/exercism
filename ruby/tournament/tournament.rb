@@ -62,10 +62,10 @@ class Match
   private
 
   def set_teams_data
-    return teams.each(&:drawn) if result == "draw"
+    return teams.each(&:mark_drawn) if result == "draw"
 
-    winner.won
-    loser.lost
+    winner.mark_won
+    loser.mark_lost
   end
 
   def winner
@@ -106,17 +106,23 @@ class Match::Team
     }
   end
 
-  def won
+  def mark_won
+    return if [@drawn, @lost].any?(&:positive?)
+
     @won = 1
     @points = Tournament::POINTS[:won]
   end
 
-  def drawn
+  def mark_drawn
+    return if [@won, @lost].any?(&:positive?)
+
     @drawn = 1
     @points = Tournament::POINTS[:drawn]
   end
 
-  def lost
+  def mark_lost
+    return if [@won, @drawn].any?(&:positive?)
+
     @lost = 1
     @points = Tournament::POINTS[:lost]
   end
