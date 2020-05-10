@@ -69,17 +69,24 @@ class Match
   end
 
   def winner
-    case result
-    when "win" then team_one
-    when "loss" then team_two
-    end
+    status[result.to_sym][:winner]
   end
 
   def loser
-    case result
-    when "loss" then team_one
-    when "win" then team_two
-    end
+    status[result.to_sym][:loser]
+  end
+
+  def status
+    {
+      win: {
+        winner: team_one,
+        loser: team_two
+      },
+      loss: {
+        loser: team_one,
+        winner: team_two
+      }
+    }
   end
 end
 
