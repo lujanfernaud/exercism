@@ -138,22 +138,22 @@ end
 class Tally
   def initialize(matches)
     @matches = matches
-    @result = {}
+    @tally = {}
   end
 
   def build
-    matches.each_with_object({}) do |match, result|
+    matches.each_with_object({}) do |match, tally|
       match.teams.each do |team|
-        unless result.keys.include?(team.name)
-          result[team.name] = team.to_h
+        unless tally.keys.include?(team.name)
+          tally[team.name] = team.to_h
           next
         end
 
-        match_attributes = result[team.name].reject { |key, _value| key == :name }
-        updated_match_attributes = match_attributes.map { |key, value| [key, value + team.to_h[key]] }.to_h
-        updated_team_data = updated_match_attributes.merge(name: team.name)
+        team_match_attributes = select_team_match_attributes(tally[team.name])
+        updated_team_attributes = sum_team_values(team_match_attributes, team)
+        updated_team_data = updated_team_attributes.merge(name: team.name)
 
-        result[team.name] = updated_team_data
+        tally[team.name] = updated_team_data
       end
     end
   end
@@ -161,7 +161,15 @@ class Tally
   private
 
   attr_reader :matches
-  attr_writer :result
+  attr_writer :tally
+
+  def select_team_match_attributes(team)
+    team.reject { |key, _value| key == :name }
+  end
+
+  def sum_team_values(match_attributes, team)
+    match_attributes.map { |key, value| [key, value + team.to_h[key]] }.to_h
+  end
 end
 
 class Table
