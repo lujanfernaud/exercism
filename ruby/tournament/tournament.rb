@@ -33,25 +33,23 @@ class Tournament
 end
 
 class Parser
-  RESULT_STATUS = {
+  MATCH_RESULT = {
     win: { winner: :team_one, loser: :team_two },
     loss: { loser: :team_one, winner: :team_two },
     draw: :draw
   }.freeze
 
   def initialize(input)
-    @input = input.each_line(chomp: true)
+    @input = input.each_line(chomp: true).reject(&:empty?)
   end
 
   def parse
     input.map do |line|
-      next if line.empty?
-
       team_one, team_two, result = line.split(";")
-      result = RESULT_STATUS[result.to_sym]
+      result = MATCH_RESULT[result.to_sym]
 
       { team_one: team_one, team_two: team_two, result: result }
-    end.compact
+    end
   end
 
   private
