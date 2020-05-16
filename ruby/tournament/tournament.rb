@@ -93,6 +93,8 @@ end
 class Match::Team
   attr_reader :name
 
+  ATTRIBUTES = [:name, :played, :won, :drawn, :lost, :points].freeze
+
   def initialize(name:, played: 1)
     @name = name
     @played = played
@@ -142,33 +144,25 @@ class Tally
   end
 
   def build
-    matches.each_with_object({}) do |match, tally|
-      match.teams.each do |team|
-        unless tally.keys.include?(team.name)
-          tally[team.name] = team.to_h
-          next
-        end
+    attributes = [:played, :won, :drawn, :lost, :points]
 
-        team_match_attributes = select_team_match_attributes(tally[team.name])
-        updated_team_attributes = sum_team_values(team_match_attributes, team)
-        updated_team_data = updated_team_attributes.merge(name: team.name)
-
-        tally[team.name] = updated_team_data
-      end
+    teams_data.map do |team, matches|
+      matches_data = attributes.map { |attr| [attr, attribute_sum(matches, attr)] }.to_h
+      matches_data.merge(name: team)
     end
   end
 
   private
 
   attr_reader :matches
-  attr_writer :tally
 
-  def select_team_match_attributes(team)
-    team.reject { |key, _value| key == :name }
+  def teams_data
+    matches.flat_map { |match| match.teams.map(&:to_h) }
+           .group_by { |team| team[:name] }
   end
 
-  def sum_team_values(match_attributes, team)
-    match_attributes.map { |key, value| [key, value + team.to_h[key]] }.to_h
+  def attribute_sum(matches, attr)
+    matches.sum { |match| match[attr] }
   end
 end
 
@@ -215,15 +209,15 @@ class Table
   end
 
   def team_rows
-    sorted_team_data.map do |_key, team|
-      team.to_h.slice(:name, :played, :won, :drawn, :lost, :points).values
+    sorted_team_data.map do |team|
+      team.slice(:name, :played, :won, :drawn, :lost, :points).values
     end
   end
 
   def sorted_team_data
-    sorted_data = teams_data.sort_by { |team| team[1][:name] }.reverse
+    sorted_data = teams_data.sort_by { |team| team[:name] }.reverse
 
-    sorted_data.sort_by { |team| team[1][:points] }.reverse
+    sorted_data.sort_by { |team| team[:points] }.reverse
   end
 
   def format_result
