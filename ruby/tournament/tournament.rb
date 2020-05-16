@@ -61,8 +61,8 @@ class Match
   attr_reader :team_one, :team_two, :result
 
   def initialize(team_one:, team_two:, result:)
-    @team_one = Team.new(name: team_one)
-    @team_two = Team.new(name: team_two)
+    @team_one = Team.new(name: team_one, played: 1)
+    @team_two = Team.new(name: team_two, played: 1)
     @result = result
 
     set_teams_data
@@ -95,24 +95,13 @@ class Match::Team
 
   ATTRIBUTES = [:name, :played, :won, :drawn, :lost, :points].freeze
 
-  def initialize(name:, played: 1)
-    @name = name
-    @played = played
-    @won = 0
-    @drawn = 0
-    @lost = 0
-    @points = 0
+  def initialize(args = {})
+    args = { name: "" }.merge(args)
+    ATTRIBUTES.each { |attr| instance_variable_set("@#{attr}", args[attr] || 0) }
   end
 
   def to_h
-    {
-      name: @name,
-      played: @played,
-      won: @won,
-      drawn: @drawn,
-      lost: @lost,
-      points: @points
-    }
+    ATTRIBUTES.map { |attr| [attr, instance_variable_get("@#{attr}")] }.to_h
   end
 
   def mark_won
@@ -140,12 +129,10 @@ end
 class Tally
   def initialize(matches)
     @matches = matches
-    @tally = {}
+    @attributes = Match::Team::ATTRIBUTES.reject { |attr| attr == :name }
   end
 
   def build
-    attributes = [:played, :won, :drawn, :lost, :points]
-
     teams_data.map do |team, matches|
       matches_data = attributes.map { |attr| [attr, attribute_sum(matches, attr)] }.to_h
       matches_data.merge(name: team)
@@ -154,7 +141,7 @@ class Tally
 
   private
 
-  attr_reader :matches
+  attr_reader :matches, :attributes
 
   def teams_data
     matches.flat_map { |match| match.teams.map(&:to_h) }
@@ -210,7 +197,7 @@ class Table
 
   def team_rows
     sorted_team_data.map do |team|
-      team.slice(:name, :played, :won, :drawn, :lost, :points).values
+      team.slice(*Match::Team::ATTRIBUTES).values
     end
   end
 
