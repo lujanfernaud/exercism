@@ -129,23 +129,29 @@ end
 class Tally
   def initialize(matches)
     @matches = matches
-    @attributes = Match::Team::ATTRIBUTES.reject { |attr| attr == :name }
   end
 
   def build
-    teams_data.map do |team, matches|
-      matches_data = attributes.map { |attr| [attr, attribute_sum(matches, attr)] }.to_h
-      matches_data.merge(name: team)
-    end
+    teams_data.map { |team, matches| sum_team_data(team, matches) }
   end
 
   private
 
-  attr_reader :matches, :attributes
+  attr_reader :matches
 
   def teams_data
     matches.flat_map { |match| match.teams.map(&:to_h) }
            .group_by { |team| team[:name] }
+  end
+
+  def sum_team_data(team, matches)
+    team_match_attributes
+      .map { |attr| [attr, attribute_sum(matches, attr)] }.to_h
+      .merge(name: team)
+  end
+
+  def team_match_attributes
+    Match::Team::ATTRIBUTES.reject { |attr| attr == :name }
   end
 
   def attribute_sum(matches, attr)
