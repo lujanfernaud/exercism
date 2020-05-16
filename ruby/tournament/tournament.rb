@@ -2,33 +2,19 @@
 
 require "pry"
 
-class Tournament
+module Tournament
   POINTS = {
     won: 3,
     drawn: 1,
     lost: 0
   }.freeze
 
-  class << self
-    def tally(input)
-      parsed_input = Parser.new(input).parse
-      matches = create_matches(parsed_input)
-      tally = Tally.new(matches).build
+  def self.tally(input)
+    parsed_input = Parser.new(input).parse
+    matches = MatchesCreator.new(parsed_input).create
+    tally = Tally.new(matches).build
 
-      Table.new(tally).build
-    end
-
-    private
-
-    def create_matches(parsed_input)
-      parsed_input.map do |match_data|
-        Match.new(
-          team_one: match_data[:team_one],
-          team_two: match_data[:team_two],
-          result: match_data[:result]
-        )
-      end
-    end
+    Table.new(tally).build
   end
 end
 
@@ -44,17 +30,29 @@ class Parser
   end
 
   def parse
-    input.map do |line|
+    @input.map do |line|
       team_one, team_two, result = line.split(";")
       result = MATCH_RESULT[result.to_sym]
 
       { team_one: team_one, team_two: team_two, result: result }
     end
   end
+end
 
-  private
+class MatchesCreator
+  def initialize(parsed_input)
+    @parsed_input = parsed_input
+  end
 
-  attr_reader :input
+  def create
+    @parsed_input.map do |match_data|
+      Match.new(
+        team_one: match_data[:team_one],
+        team_two: match_data[:team_two],
+        result: match_data[:result]
+      )
+    end
+  end
 end
 
 class Match
