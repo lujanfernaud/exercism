@@ -20,9 +20,9 @@ end
 
 class Parser
   MATCH_RESULT = {
-    win: { winner: :team_one, loser: :team_two },
-    loss: { loser: :team_one, winner: :team_two },
-    draw: :draw
+    win: { team_one: :winner, team_two: :loser },
+    draw: { team_one: :drawn, team_two: :drawn },
+    loss: { team_one: :loser, team_two: :winner }
   }.freeze
 
   def initialize(input)
@@ -56,35 +56,36 @@ class MatchesCreator
 end
 
 class Match
-  attr_reader :team_one, :team_two, :result
-
   def initialize(team_one:, team_two:, result:)
-    @team_one = Team.new(name: team_one, played: 1)
-    @team_two = Team.new(name: team_two, played: 1)
+    @team_one = team_one
+    @team_two = team_two
     @result = result
-
-    set_teams_data
   end
 
   def teams
-    [team_one, team_two]
-  end
-
-  def winner
-    send(result[:winner])
-  end
-
-  def loser
-    send(result[:loser])
+    [
+      Team.new(**team_attributes(:team_one)).to_h,
+      Team.new(**team_attributes(:team_two)).to_h
+    ]
   end
 
   private
 
-  def set_teams_data
-    return teams.each(&:mark_drawn) if result == :draw
+  attr_reader :team_one, :team_two, :result
 
-    winner.mark_won
-    loser.mark_lost
+  def team_attributes(team)
+    team_state = result[team]
+    team_state_attributes = team_attributes_tally[team_state]
+
+    { name: send(team), played: 1 }.merge(team_state_attributes)
+  end
+
+  def team_attributes_tally
+    {
+      winner: { won: 1, points: Tournament::POINTS[:won] },
+      drawn:  { drawn: 1, points: Tournament::POINTS[:drawn] },
+      loser:  { lost: 1, points: Tournament::POINTS[:lost] }
+    }
   end
 end
 
@@ -100,27 +101,6 @@ class Match::Team
 
   def to_h
     ATTRIBUTES.map { |attr| [attr, instance_variable_get("@#{attr}")] }.to_h
-  end
-
-  def mark_won
-    return if [@drawn, @lost].any?(&:positive?)
-
-    @won = 1
-    @points = Tournament::POINTS[:won]
-  end
-
-  def mark_drawn
-    return if [@won, @lost].any?(&:positive?)
-
-    @drawn = 1
-    @points = Tournament::POINTS[:drawn]
-  end
-
-  def mark_lost
-    return if [@won, @drawn].any?(&:positive?)
-
-    @lost = 1
-    @points = Tournament::POINTS[:lost]
   end
 end
 
@@ -138,8 +118,7 @@ class Tally
   attr_reader :matches
 
   def teams_data
-    matches.flat_map { |match| match.teams.map(&:to_h) }
-           .group_by { |team| team[:name] }
+    matches.flat_map(&:teams).group_by { |team| team[:name] }
   end
 
   def sum_team_data(team, matches)
