@@ -19,7 +19,7 @@ module Tournament
 end
 
 class Parser
-  MATCH_RESULT = {
+  MATCH_RESULTS = {
     win: { team_one: :winner, team_two: :loser },
     draw: { team_one: :drawn, team_two: :drawn },
     loss: { team_one: :loser, team_two: :winner }
@@ -32,7 +32,7 @@ class Parser
   def parse
     @input.map do |line|
       team_one, team_two, result = line.split(";")
-      result = MATCH_RESULT[result.to_sym]
+      result = MATCH_RESULTS[result.to_sym]
 
       { team_one: team_one, team_two: team_two, result: result }
     end
@@ -74,17 +74,17 @@ class Match
   attr_reader :team_one, :team_two, :result
 
   def team_attributes(team)
-    team_state = result[team]
-    team_state_attributes = team_attributes_tally[team_state]
+    team_result = result[team]
+    team_result_attributes = result_attributes[team_result]
 
-    { name: send(team), played: 1 }.merge(team_state_attributes)
+    { name: send(team), played: 1 }.merge(team_result_attributes)
   end
 
-  def team_attributes_tally
+  def result_attributes
     {
       winner: { won: 1, points: Tournament::POINTS[:won] },
-      drawn:  { drawn: 1, points: Tournament::POINTS[:drawn] },
-      loser:  { lost: 1, points: Tournament::POINTS[:lost] }
+      drawn: { drawn: 1, points: Tournament::POINTS[:drawn] },
+      loser: { lost: 1, points: Tournament::POINTS[:lost] }
     }
   end
 end
