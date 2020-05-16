@@ -11,7 +11,7 @@ module Tournament
 
   def self.tally(input)
     parsed_input = Parser.new(input).parse
-    matches = MatchesCreator.new(parsed_input).create
+    matches = Matches.new(parsed_input).create
     tally = Tally.new(matches).build
 
     Table.new(tally).build
@@ -42,7 +42,7 @@ module Tournament
 end
 
 module Tournament
-  class MatchesCreator
+  class Matches
     def initialize(parsed_input)
       @parsed_input = parsed_input
     end
