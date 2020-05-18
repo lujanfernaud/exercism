@@ -33,8 +33,10 @@ module Tournament
         team_one, team_two, result = line.split(";")
         result = MATCH_RESULTS[result.to_sym]
 
+        next if result.nil?
+
         { team_one: team_one, team_two: team_two, result: result }
-      end
+      end.compact
     end
   end
 end
