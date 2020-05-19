@@ -191,4 +191,27 @@ class TournamentTest < Minitest::Test
 
     assert_equal expected, Tournament.tally(input)
   end
+
+  def test_incorrect_results_given
+    # skip
+    input = <<~INPUT
+      Courageous Californians;Devastating Donkeys;won
+      Allegoric Alaskans;Blithering Badgers;won
+      Courageous Californians;Blithering Badgers;won
+      Devastating Donkeys;Allegoric Alaskans;lost
+      Allegoric Alaskans;Courageous Californians;drawn
+      Blithering Badgers;Devastating Donkeys;draw
+      Allegoric Alaskans;Courageous Californians;draw
+    INPUT
+
+    expected = <<~TALLY
+      Team                           | MP |  W |  D |  L |  P
+      Allegoric Alaskans             |  1 |  0 |  1 |  0 |  1
+      Blithering Badgers             |  1 |  0 |  1 |  0 |  1
+      Courageous Californians        |  1 |  0 |  1 |  0 |  1
+      Devastating Donkeys            |  1 |  0 |  1 |  0 |  1
+    TALLY
+
+    assert_equal expected, Tournament.tally(input)
+  end
 end
