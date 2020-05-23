@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-require_relative "tournament/parser"
-require_relative "tournament/matches"
-require_relative "tournament/tally"
-require_relative "tournament/table"
+require_relative "tournament/parse_input"
+require_relative "tournament/create_matches"
+require_relative "tournament/build_tally"
+require_relative "tournament/build_table"
 
 module Tournament
   POINTS = {
@@ -13,10 +13,10 @@ module Tournament
   }.freeze
 
   def self.tally(input)
-    parsed_input = Parser.new(input).parse
-    matches = Matches.new(parsed_input).create
-    tally = Tally.new(matches).build
+    parsed_input = ParseInput.call(input)
+    matches = CreateMatches.call(parsed_input)
+    tally = BuildTally.call(matches)
 
-    Table.new(tally).build
+    BuildTable.call(tally)
   end
 end

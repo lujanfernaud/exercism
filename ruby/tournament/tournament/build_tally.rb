@@ -1,12 +1,16 @@
 # frozen_string_literal: true
 
 module Tournament
-  class Tally
+  class BuildTally
+    def self.call(matches)
+      new(matches).call
+    end
+
     def initialize(matches)
       @matches = matches
     end
 
-    def build
+    def call
       teams_data.map { |team, matches| sum_team_data(team, matches) }
     end
 

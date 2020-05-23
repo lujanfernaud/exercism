@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 module Tournament
-  class Table
+  class BuildTable
     COLUMNS_JUSTIFICATION = {
       0 => [:ljust, 30],
       1 => [:rjust, 2],
@@ -20,12 +22,16 @@ module Tournament
 
     HEADER = DATA.values
 
+    def self.call(teams_data)
+      new(teams_data).call
+    end
+
     def initialize(teams_data)
       @teams_data = teams_data
       @result = []
     end
 
-    def build
+    def call
       add_header
       add_team_rows
       format_result

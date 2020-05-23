@@ -3,13 +3,9 @@
 require_relative "match"
 
 module Tournament
-  class Matches
-    def initialize(parsed_input)
-      @parsed_input = parsed_input
-    end
-
-    def create
-      @parsed_input.map do |match_data|
+  class CreateMatches
+    def self.call(parsed_input)
+      parsed_input.map do |match_data|
         Match.new(
           team_one: match_data[:team_one],
           team_two: match_data[:team_two],
