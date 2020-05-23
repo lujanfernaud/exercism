@@ -1,3 +1,7 @@
+# frozen_string_literal: true
+
+require_relative "match"
+
 module Tournament
   class Matches
     def initialize(parsed_input)

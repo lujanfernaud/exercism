@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Tournament
   class Tally
     def initialize(matches)

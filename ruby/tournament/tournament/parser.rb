@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Tournament
   class Parser
     MATCH_RESULTS = {

@@ -2,7 +2,6 @@
 
 require_relative "tournament/parser"
 require_relative "tournament/matches"
-require_relative "tournament/match"
 require_relative "tournament/tally"
 require_relative "tournament/table"
 
