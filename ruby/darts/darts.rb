@@ -1,5 +1,5 @@
 class Darts
-  ABSOLUTE_SUM_TO_CIRCLE = {
+  CIRCLE_TO_ABSOLUTE_SUM_RANGE = {
     inner: 0.0..1.4,
     middle: 1.5..7.0,
     outer: 7.0..14.0,
@@ -14,21 +14,15 @@ class Darts
   }.freeze
 
   def initialize(*coordinates)
-    @coordinates = coordinates
+    @absolute_sum = coordinates.map(&:abs).sum
   end
 
   def score
-    case coordinates_sum
-    when ABSOLUTE_SUM_TO_CIRCLE[:inner]  then POINTS[:inner]
-    when ABSOLUTE_SUM_TO_CIRCLE[:middle] then POINTS[:middle]
-    when ABSOLUTE_SUM_TO_CIRCLE[:outer]  then POINTS[:outer]
-    when ABSOLUTE_SUM_TO_CIRCLE[:missed] then POINTS[:missed]
+    case @absolute_sum
+    when CIRCLE_TO_ABSOLUTE_SUM_RANGE[:inner]  then POINTS[:inner]
+    when CIRCLE_TO_ABSOLUTE_SUM_RANGE[:middle] then POINTS[:middle]
+    when CIRCLE_TO_ABSOLUTE_SUM_RANGE[:outer]  then POINTS[:outer]
+    when CIRCLE_TO_ABSOLUTE_SUM_RANGE[:missed] then POINTS[:missed]
     end
-  end
-
-  private
-
-  def coordinates_sum
-    @coordinates.map(&:abs).sum
   end
 end
