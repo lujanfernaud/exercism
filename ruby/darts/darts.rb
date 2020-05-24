@@ -1,5 +1,5 @@
 class Darts
-  CIRCLE_TO_ABSOLUTE_SUM_RANGE = {
+  CIRCLE_TO_ABSOLUTE_SUM = {
     inner:  0.0..1.4,
     middle: 1.5..7.0,
     outer:  7.0..14.0
@@ -17,9 +17,9 @@ class Darts
 
   def score
     case @absolute_sum
-    when CIRCLE_TO_ABSOLUTE_SUM_RANGE[:inner]  then POINTS[:inner]
-    when CIRCLE_TO_ABSOLUTE_SUM_RANGE[:middle] then POINTS[:middle]
-    when CIRCLE_TO_ABSOLUTE_SUM_RANGE[:outer]  then POINTS[:outer]
+    when CIRCLE_TO_ABSOLUTE_SUM[:inner]  then POINTS[:inner]
+    when CIRCLE_TO_ABSOLUTE_SUM[:middle] then POINTS[:middle]
+    when CIRCLE_TO_ABSOLUTE_SUM[:outer]  then POINTS[:outer]
     else 0
     end
   end
