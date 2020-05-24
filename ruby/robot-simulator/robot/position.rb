@@ -31,7 +31,7 @@ class Robot
     end
 
     def coordinates
-      [x, y]
+      [@x, @y]
     end
 
     def coordinates=(args)
@@ -52,9 +52,5 @@ class Robot
     def find_direction(bearing, direction)
       DIRECTIONS[bearing][direction]
     end
-
-    private
-
-    attr_accessor :x, :y
   end
 end
