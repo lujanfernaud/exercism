@@ -1,14 +1,14 @@
 class Darts
   CIRCLE_TO_ABSOLUTE_SUM_RANGE = {
-    inner: 0.0..1.4,
+    inner:  0.0..1.4,
     middle: 1.5..7.0,
-    outer: 7.0..14.0
+    outer:  7.0..14.0
   }.freeze
 
   POINTS = {
-    inner: 10,
+    inner:  10,
     middle: 5,
-    outer: 1
+    outer:  1
   }.freeze
 
   def initialize(*coordinates)
