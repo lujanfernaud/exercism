@@ -39,7 +39,7 @@ class Robot
       @y = args[1].to_i
     end
 
-    def move(bearing, _speed)
+    def move(bearing)
       move = DIRECTIONS[bearing][:move]
 
       self.coordinates = coordinates.zip(move).map(&:sum)

@@ -160,17 +160,6 @@ class RobotSimulatorTest < Minitest::Test
     assert_equal :west, robot.bearing
   end
 
-  # def test_instruct_robot_with_different_speed
-  #   # skip
-  #   robot = Robot.new(speed: 3)
-
-  #   simulator.place(robot, x: -2, y: 1, direction: :east)
-  #   simulator.evaluate(robot, "RLAALAL")
-
-  #   assert_equal [4, 4], robot.coordinates
-  #   assert_equal :west, robot.bearing
-  # end
-
   def test_instruct_many_robots
     # skip
     robot1 = Robot.new

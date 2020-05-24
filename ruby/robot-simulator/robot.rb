@@ -3,11 +3,10 @@
 require_relative "robot/position"
 
 class Robot
-  attr_reader :bearing, :speed
+  attr_reader :bearing
 
-  def initialize(bearing: :north, speed: 1, position: Position.new)
+  def initialize(bearing: :north, position: Position.new)
     @bearing = bearing
-    @speed = speed
     @position = position
   end
 
@@ -30,7 +29,7 @@ class Robot
   end
 
   def advance
-    position.move(bearing, speed)
+    position.move(bearing)
   end
 
   def coordinates
