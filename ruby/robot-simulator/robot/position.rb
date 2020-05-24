@@ -4,26 +4,22 @@ class Robot
   class Position
     DIRECTIONS = {
       north: {
-        axis: :y,
-        multiplier: 1,
+        move: [0, 1],
         right: :east,
         left: :west
       },
       east: {
-        axis: :x,
-        multiplier: 1,
+        move: [1, 0],
         right: :south,
         left: :north
       },
       south: {
-        axis: :y,
-        multiplier: -1,
+        move: [0, -1],
         right: :west,
         left: :east
       },
       west: {
-        axis: :x,
-        multiplier: -1,
+        move: [-1, 0],
         right: :north,
         left: :south
       }
@@ -43,12 +39,10 @@ class Robot
       @y = args[1].to_i
     end
 
-    def move(bearing, speed)
-      axis = DIRECTIONS[bearing][:axis]
-      current_axis_value = send(axis)
-      advance_positions = speed * DIRECTIONS[bearing][:multiplier]
+    def move(bearing, _speed)
+      move = DIRECTIONS[bearing][:move]
 
-      send("#{axis}=", current_axis_value + advance_positions)
+      self.coordinates = coordinates.zip(move).map(&:sum)
     end
 
     def valid_direction?(bearing)
