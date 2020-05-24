@@ -1,4 +1,4 @@
 # frozen_string_literal: true
 
-require "./robot"
-require "./simulator"
+require_relative "robot"
+require_relative "simulator"
