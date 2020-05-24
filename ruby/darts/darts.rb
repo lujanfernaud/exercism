@@ -1,7 +1,7 @@
 class Darts
   CIRCLE_TO_RANGE = {
     inner:  0.0..1.4,
-    middle: 1.5..7.0,
+    middle: 1.4..7.0,
     outer:  7.0..14.0
   }.freeze
 
