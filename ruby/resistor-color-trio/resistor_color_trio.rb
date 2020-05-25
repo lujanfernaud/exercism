@@ -53,7 +53,7 @@ class ResistorColorTrio
   end
 
   def zeros
-    @zeros ||= 10**coded_colors[2].to_i
+    @zeros ||= 10**coded_colors[2]
   end
 
   def coded_colors
