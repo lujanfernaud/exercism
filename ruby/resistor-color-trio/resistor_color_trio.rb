@@ -3,8 +3,8 @@
 class ResistorColorTrio
   COLORS = %w[black brown red orange yellow green blue violet grey white].freeze
 
-  def initialize(colors)
-    @colors = [colors].flatten
+  def initialize(input_colors)
+    @input_colors = [input_colors].flatten
   end
 
   def label
@@ -15,14 +15,14 @@ class ResistorColorTrio
 
   private
 
-  attr_reader :colors
+  attr_reader :input_colors
 
   def invalid_color_error
     [ArgumentError, "Not a valid color: #{invalid_color}"]
   end
 
   def invalid_color
-    @invalid_color ||= colors - COLORS
+    @invalid_color ||= input_colors - COLORS
   end
 
   def value_with_type
@@ -34,10 +34,18 @@ class ResistorColorTrio
   end
 
   def value
-    @value ||= (coded_colors[0..1].join.to_i * 10**coded_colors[2].to_i).to_s
+    @value ||= (main_value * zeros).to_s
+  end
+
+  def main_value
+    @main_value ||= coded_colors[0..1].join.to_i
+  end
+
+  def zeros
+    @zeros ||= 10**coded_colors[2].to_i
   end
 
   def coded_colors
-    @coded_colors ||= colors.map { |color| COLORS.index(color.downcase) }
+    @coded_colors ||= input_colors.map { |color| COLORS.index(color.downcase) }
   end
 end
