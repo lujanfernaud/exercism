@@ -52,11 +52,11 @@ class ResistorColorTrio
     coded_colors[0..1].join.to_i
   end
 
-  def multiplier
-    10**coded_colors[2]
-  end
-
   def coded_colors
     @coded_colors ||= input_colors.map(&COLOR_TO_CODE)
+  end
+
+  def multiplier
+    10**coded_colors[2]
   end
 end
