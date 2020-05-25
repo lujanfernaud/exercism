@@ -45,15 +45,15 @@ class ResistorColorTrio
   end
 
   def value
-    @value ||= (main_value * zeros).to_s
+    @value ||= (main_value * multiplier).to_s
   end
 
   def main_value
     @main_value ||= coded_colors[0..1].join.to_i
   end
 
-  def zeros
-    @zeros ||= 10**coded_colors[2]
+  def multiplier
+    @multiplier ||= 10**coded_colors[2]
   end
 
   def coded_colors
