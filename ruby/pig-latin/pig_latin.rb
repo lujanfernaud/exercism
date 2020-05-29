@@ -10,10 +10,26 @@ class PigLatin
     private
 
     def translate_word(word)
-      if word.match(VOWEL_SOUNDS)
-        word + "ay"
-      elsif (match = word.match(CONSONANT_SOUNDS))
-        match[2] + match[1] + "ay"
+      word.then(&translate_vowels).then(&translate_consonants)
+    end
+
+    def translate_vowels
+      lambda do |word|
+        return word + "ay" if word.match(VOWEL_SOUNDS)
+
+        word
+      end
+    end
+
+    def translate_consonants
+      lambda do |word|
+        return word if word.end_with?("ay")
+
+        match = word.match(CONSONANT_SOUNDS)
+
+        return match[2] + match[1] + "ay" if match
+
+        word
       end
     end
   end
