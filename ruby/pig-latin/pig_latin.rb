@@ -1,36 +1,23 @@
 class PigLatin
-  VOWEL_SOUNDS = /\A(xr|xt|yt|a|e|i|o|u)(.*)/
-  CONSONANT_SOUNDS = /\A(squ|thr|sch|ch|rh|qu|th|b|c|d|f|g|h|j|k|l|m|n|p|q|r|s|t|v|w|x|y|z)(.*)/
+  VOWEL_SOUNDS_REGEX = %r{\A(xr|xt|yt|a|e|i|o|u)(.*)}
+
+  CONSONANT_SOUNDS_REGEX = %r{
+    \A(squ|thr|sch|ch|rh|qu|th|b|c|d|f|g|h|j|k|l|m|n|p|q|r|s|t|v|w|x|y|z)(.*)
+  }x
 
   class << self
     def translate(input)
-      input.split(" ").map { |word| translate_word(word) }.join(" ")
+      input.split(" ").map(&method(:translate_word)).join(" ")
     end
 
     private
 
     def translate_word(word)
-      word.then(&translate_vowels).then(&translate_consonants)
-    end
+      return word + "ay" if word.match(VOWEL_SOUNDS_REGEX)
 
-    def translate_vowels
-      lambda do |word|
-        return word + "ay" if word.match(VOWEL_SOUNDS)
+      match = word.match(CONSONANT_SOUNDS_REGEX)
 
-        word
-      end
-    end
-
-    def translate_consonants
-      lambda do |word|
-        return word if word.end_with?("ay")
-
-        match = word.match(CONSONANT_SOUNDS)
-
-        return match[2] + match[1] + "ay" if match
-
-        word
-      end
+      match[2] + match[1] + "ay"
     end
   end
 end
