@@ -1,5 +1,5 @@
 class ResistorColors
-  COLORS = {
+  COLOR_CODES = {
     "black"  => 0,
     "brown"  => 1,
     "red"    => 2,
@@ -13,6 +13,6 @@ class ResistorColors
   }.freeze
 
   def self.value(colors)
-    colors.map { |color| COLORS[color] }.join.to_i
+    colors.map(&COLOR_CODES).join.to_i
   end
 end
