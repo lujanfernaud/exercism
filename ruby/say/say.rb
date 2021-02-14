@@ -1,4 +1,6 @@
 class Say
+  LEADING_ZEROES_REGEX = /\A0+/
+
   NUMBER_TO_WORD = {
     "0" => "zero",
     "1" => "one",
@@ -39,75 +41,60 @@ class Say
   def in_english
     return NUMBER_TO_WORD[number] if NUMBER_TO_WORD[number]
 
-    handle_numbers(number.split(''))
+    convert_numbers(number.split(''))
   end
 
   private
 
   attr_reader :number
 
-  def handle_numbers(numbers)
+  def convert_numbers(numbers)
+    return unless numbers
+
     case numbers.size
     when 13.. then raise ArgumentError
-    when 10..12 then handle_billions(numbers)
-    when 7..9 then handle_millions(numbers)
-    when 4..6 then handle_thousands(numbers)
-    when 4..12 then aaa(numbers)
-    when 3 then handle_hundreds(numbers)
-    when 2 then handle_tens(numbers)
+    when 4..12 then convert_big_numbers(numbers)
+    when 3 then convert_hundreds(numbers)
+    when 2 then convert_tens(numbers)
     else NUMBER_TO_WORD[numbers.first]
     end
   end
 
-  def handle_billions(numbers)
-    initial = numbers.reverse[9..].reverse
-    initial = "#{handle_numbers(initial)} billion"
+  def convert_big_numbers(numbers)
+    number_groups = prepare_number_groups(numbers)
 
-    numbers = numbers.reverse[..8].reverse.join.match(/([1-9]+)/)&.send(:[], 1)&.split('')
+    big_groups = number_groups.slice(:billion, :million, :thousand).map do |type, numbers|
+      "#{convert_numbers(numbers)} #{type}"
+    end.join(" ").strip
 
-    return initial if numbers.nil?
-
-    "#{initial} #{handle_numbers(numbers)}".strip
+    "#{big_groups} #{convert_numbers(number_groups[:hundred])}".strip
   end
 
-  def handle_millions(numbers)
-    initial = numbers.reverse[6..].reverse
-    initial = "#{handle_numbers(initial)} million"
+  def prepare_number_groups(numbers)
+    number_groups = numbers.reverse.each_slice(3).map { |group| prepare_group(group) }
 
-    numbers = numbers.reverse[..5].reverse.join.match(/([1-9]+)/)&.send(:[], 1)&.split('')
-
-    return initial if numbers.nil?
-
-    "#{initial} #{handle_numbers(numbers)}".strip
+    [:hundred, :thousand, :million, :billion].zip(number_groups).to_h.compact
   end
 
-  def handle_thousands(numbers)
-    initial = numbers.reverse[3..].reverse
-    initial = "#{handle_numbers(initial)} thousand"
+  def prepare_group(numbers)
+    numbers = numbers.reverse.join.sub(LEADING_ZEROES_REGEX, "")
 
-    numbers = numbers.reverse[..2].reverse.join.match(/([1-9]+)/)&.send(:[], 1)&.split('')
+    return if numbers.empty?
 
-    return initial if numbers.nil?
-
-    "#{initial} #{handle_numbers(numbers)}".strip
+    numbers.split("")
   end
 
-  def handle_hundreds(numbers)
-    initial = numbers.reverse[2..].reverse
-    initial = "#{handle_numbers(initial)} hundred"
+  def convert_hundreds(numbers)
+    hundreds = numbers.reverse[2..].reverse
+    hundreds = "#{convert_numbers(hundreds)} hundred"
 
     numbers = numbers.reverse[..1].reverse.join.match(/([1-9]+)/)&.send(:[], 1)&.split('')
 
-    return initial if numbers.nil?
-
-    "#{initial} #{handle_numbers(numbers)}".strip
+    "#{hundreds} #{convert_numbers(numbers)}".strip
   end
 
-  def handle_tens(numbers)
+  def convert_tens(numbers)
     group = numbers[0] + "0"
-    initial = NUMBER_TO_WORD[group]
-
-    return unless initial
 
     "#{NUMBER_TO_WORD[group]}-#{NUMBER_TO_WORD[numbers[1]]}"
   end
