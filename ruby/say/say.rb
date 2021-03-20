@@ -32,33 +32,25 @@ class Say
 
   def initialize(number)
     @number = number.to_s
-
-    raise ArgumentError if number.negative?
   end
 
   def in_english
-    return NUMBER_TO_WORD[number] if NUMBER_TO_WORD[number]
-
-    handle_numbers(number.split(''))
+    handle_numbers(@number.chars)
   end
 
   private
 
-  attr_reader :number
-
   def handle_numbers(numbers)
     case numbers.join.to_i
-    when 0..9
-      NUMBER_TO_WORD[numbers.first]
-    when 10..99
-      handle_tens(numbers)
+    when 0..99
+      convert_tens(numbers)
     when 100..999
       convert(numbers, "hundred", start_index: 2)
-    when 1000..999999
+    when 1_000..999_999
       convert(numbers, "thousand", start_index: 3)
-    when 1000000..999999999
+    when 1_000_000..999_999_999
       convert(numbers, "million", start_index: 6)
-    when 1000000000..999999999999
+    when 1_000_000_000..999_999_999_999
       convert(numbers, "billion", start_index: 9)
     else
       raise ArgumentError
@@ -71,14 +63,21 @@ class Say
     initial = numbers.reverse[start_index..].reverse
     initial = "#{handle_numbers(initial)} #{group_type}"
 
-    numbers = numbers.reverse[..end_index].reverse.join.match(/([1-9]+)/)&.send(:[], 1)&.split('')
+    remaining = numbers.reverse[..end_index].reverse
+    remaining = remove_leading_zeroes(remaining)
 
-    return initial if numbers.nil?
+    return initial if remaining.nil?
 
-    "#{initial} #{handle_numbers(numbers)}".strip
+    "#{initial} #{handle_numbers(remaining)}"
   end
 
-  def handle_tens(numbers)
+  def remove_leading_zeroes(numbers)
+    numbers.join.match(/([1-9]+)/)&.send(:[], 1)&.chars
+  end
+
+  def convert_tens(numbers)
+    return NUMBER_TO_WORD[numbers.join] if NUMBER_TO_WORD[numbers.join]
+
     initial = NUMBER_TO_WORD.select { |number| number.match(/\A#{numbers[0]}\d\z/) }.values.first
 
     return unless initial
