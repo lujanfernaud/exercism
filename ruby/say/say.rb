@@ -31,72 +31,58 @@ class Say
   }.freeze
 
   def initialize(number)
-    raise ArgumentError if number.negative?
-    raise ArgumentError if number >= 999_999_999_999
-
     @number = number.to_s
+
+    raise ArgumentError if number.negative?
   end
 
   def in_english
     return NUMBER_TO_WORD[number] if NUMBER_TO_WORD[number]
-    return convert_tens(number) if number.size == 2
 
-    convert_big_number(number)
+    handle_numbers(number.split(''))
   end
 
   private
 
   attr_reader :number
 
-  def convert_tens(numbers)
-    tens = numbers[0] + "0"
-
-    "#{NUMBER_TO_WORD[tens]}-#{NUMBER_TO_WORD[numbers[1]]}"
-  end
-
-  def convert_big_number(number)
-    number_groups = PrepareNumberGroups.call(number.chars)
-
-    number_groups.map do |type, numbers|
-      convert_group(numbers, type)
-    end.join(" ").strip
-  end
-
-  def convert_group(numbers, type)
-    return "#{NUMBER_TO_WORD[numbers.first]} #{type}" if numbers.size == 1
-
-    "#{convert_hundreds(numbers)} #{type if type != :hundred}"
-  end
-
-  def convert_hundreds(numbers)
-    hundreds = "#{NUMBER_TO_WORD[numbers.first]} hundred"
-    tens = numbers[1..2].join
-
-    "#{hundreds} #{convert_tens(tens)}".strip
-  end
-
-  class PrepareNumberGroups
-    LEADING_ZEROES_REGEX = /\A0+/
-    ENDING_ZEROES_REGEX = /00\z/
-
-    class << self
-      def call(numbers)
-        number_groups = numbers.reverse.each_slice(3).map { |group| prepare_group(group) }
-
-        [:hundred, :thousand, :million, :billion].
-          zip(number_groups).to_h.compact.
-          slice(:billion, :million, :thousand, :hundred)
-      end
-
-      private
-
-      def prepare_group(numbers)
-        numbers = numbers.reverse.join.sub(LEADING_ZEROES_REGEX, "").sub(ENDING_ZEROES_REGEX, "")
-
-        return if numbers.empty?
-
-        numbers.chars
-      end
+  def handle_numbers(numbers)
+    case numbers.join.to_i
+    when 0..9
+      NUMBER_TO_WORD[numbers.first]
+    when 10..99
+      handle_tens(numbers)
+    when 100..999
+      convert(numbers, "hundred", start_index: 2)
+    when 1000..999999
+      convert(numbers, "thousand", start_index: 3)
+    when 1000000..999999999
+      convert(numbers, "million", start_index: 6)
+    when 1000000000..999999999999
+      convert(numbers, "billion", start_index: 9)
+    else
+      raise ArgumentError
     end
+  end
+
+  def convert(numbers, group_type, start_index:)
+    end_index = start_index - 1
+
+    initial = numbers.reverse[start_index..].reverse
+    initial = "#{handle_numbers(initial)} #{group_type}"
+
+    numbers = numbers.reverse[..end_index].reverse.join.match(/([1-9]+)/)&.send(:[], 1)&.split('')
+
+    return initial if numbers.nil?
+
+    "#{initial} #{handle_numbers(numbers)}".strip
+  end
+
+  def handle_tens(numbers)
+    initial = NUMBER_TO_WORD.select { |number| number.match(/\A#{numbers[0]}\d\z/) }.values.first
+
+    return unless initial
+
+    "#{initial}-#{NUMBER_TO_WORD[numbers[1]]}"
   end
 end
