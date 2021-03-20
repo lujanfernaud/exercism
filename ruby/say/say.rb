@@ -1,6 +1,4 @@
 class Say
-  LEADING_ZEROES_REGEX = /\A0+/
-
   NUMBER_TO_WORD = {
     "0" => "zero",
     "1" => "one",
@@ -33,69 +31,72 @@ class Say
   }.freeze
 
   def initialize(number)
-    @number = number.to_s
-
     raise ArgumentError if number.negative?
+    raise ArgumentError if number >= 999_999_999_999
+
+    @number = number.to_s
   end
 
   def in_english
     return NUMBER_TO_WORD[number] if NUMBER_TO_WORD[number]
+    return convert_tens(number) if number.size == 2
 
-    convert_numbers(number.split(''))
+    convert_big_number(number)
   end
 
   private
 
   attr_reader :number
 
-  def convert_numbers(numbers)
-    return unless numbers
+  def convert_tens(numbers)
+    tens = numbers[0] + "0"
 
-    case numbers.size
-    when 13.. then raise ArgumentError
-    when 4..12 then convert_big_numbers(numbers)
-    when 3 then convert_hundreds(numbers)
-    when 2 then convert_tens(numbers)
-    else NUMBER_TO_WORD[numbers.first]
-    end
+    "#{NUMBER_TO_WORD[tens]}-#{NUMBER_TO_WORD[numbers[1]]}"
   end
 
-  def convert_big_numbers(numbers)
-    number_groups = prepare_number_groups(numbers)
+  def convert_big_number(number)
+    number_groups = PrepareNumberGroups.call(number.chars)
 
-    big_groups = number_groups.slice(:billion, :million, :thousand).map do |type, numbers|
-      "#{convert_numbers(numbers)} #{type}"
+    number_groups.map do |type, numbers|
+      convert_group(numbers, type)
     end.join(" ").strip
-
-    "#{big_groups} #{convert_numbers(number_groups[:hundred])}".strip
   end
 
-  def prepare_number_groups(numbers)
-    number_groups = numbers.reverse.each_slice(3).map { |group| prepare_group(group) }
+  def convert_group(numbers, type)
+    return "#{NUMBER_TO_WORD[numbers.first]} #{type}" if numbers.size == 1
 
-    [:hundred, :thousand, :million, :billion].zip(number_groups).to_h.compact
-  end
-
-  def prepare_group(numbers)
-    numbers = numbers.reverse.join.sub(LEADING_ZEROES_REGEX, "")
-
-    return if numbers.empty?
-
-    numbers.split("")
+    "#{convert_hundreds(numbers)} #{type if type != :hundred}"
   end
 
   def convert_hundreds(numbers)
-    hundreds = numbers.reverse[2..].reverse
-    hundreds = "#{convert_numbers(hundreds)} hundred"
+    hundreds = "#{NUMBER_TO_WORD[numbers.first]} hundred"
+    tens = numbers[1..2].join
 
-    numbers = numbers.reverse[..1].reverse.join.match(/([1-9]+)/)&.send(:[], 1)&.split('')
-
-    "#{hundreds} #{convert_numbers(numbers)}".strip
+    "#{hundreds} #{convert_tens(tens)}".strip
   end
 
-  def convert_tens(numbers)
-    group = numbers[0] + "0"
+  class PrepareNumberGroups
+    LEADING_ZEROES_REGEX = /\A0+/
+    ENDING_ZEROES_REGEX = /00\z/
 
-    "#{NUMBER_TO_WORD[group]}-#{NUMBER_TO_WORD[numbers[1]]}"
+    class << self
+      def call(numbers)
+        number_groups = numbers.reverse.each_slice(3).map { |group| prepare_group(group) }
+
+        [:hundred, :thousand, :million, :billion].
+          zip(number_groups).to_h.compact.
+          slice(:billion, :million, :thousand, :hundred)
+      end
+
+      private
+
+      def prepare_group(numbers)
+        numbers = numbers.reverse.join.sub(LEADING_ZEROES_REGEX, "").sub(ENDING_ZEROES_REGEX, "")
+
+        return if numbers.empty?
+
+        numbers.chars
+      end
+    end
   end
 end
