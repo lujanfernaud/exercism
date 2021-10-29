@@ -1,17 +1,20 @@
-# frozen_string_literal: true
-
 require_relative "robot/position"
 
 class Robot
   attr_reader :bearing
 
+  # @param bearing [Symbol]
+  # @param position [Position]
   def initialize(bearing: :north, position: Position.new)
     @bearing = bearing
     @position = position
   end
 
+  # @param bearing [Symbol]
+  #
+  # @raise [InvalidBearingError]
   def orient(bearing)
-    raise ArgumentError unless position.valid_direction?(bearing)
+    position.check_bearing!(bearing)
 
     @bearing = bearing
   end
@@ -24,6 +27,7 @@ class Robot
     @bearing = turn(:left)
   end
 
+  # @param coordinates [Array<Integer>] Example: [0, 1]
   def at(*coordinates)
     position.coordinates = coordinates
   end
@@ -40,7 +44,10 @@ class Robot
 
   attr_reader :position
 
+  # @param direction [Symbol]
+  #
+  # @return [Symbol]
   def turn(direction)
-    position.find_direction(bearing, direction)
+    position.find_new_bearing(bearing, direction)
   end
 end

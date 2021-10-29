@@ -1,8 +1,6 @@
-# frozen_string_literal: true
-
 class Robot
   class Position
-    DIRECTIONS = {
+    BEARINGS = {
       north: {
         move: [0, 1],
         right: :east,
@@ -25,32 +23,54 @@ class Robot
       }
     }.freeze
 
+    # @param x [Integer]
+    # @param y [Integer]
     def initialize(x: 0, y: 0)
       @x = x.to_i
       @y = y.to_i
     end
 
+    # @return [Array<Integer>] Example: [0, 1]
     def coordinates
       [@x, @y]
     end
 
-    def coordinates=(args)
-      @x = args[0].to_i
-      @y = args[1].to_i
+    # @param coordinates [Array<Integer>] Example: [0, 1]
+    def coordinates=(coordinates)
+      @x = coordinates.first.to_i
+      @y = coordinates.last.to_i
     end
 
+    # @param bearing [Symbol]
     def move(bearing)
-      move = DIRECTIONS[bearing][:move]
+      move = BEARINGS[bearing][:move]
 
       self.coordinates = coordinates.zip(move).map(&:sum)
     end
 
-    def valid_direction?(bearing)
-      DIRECTIONS.key?(bearing)
+    # @param bearing [Symbol]
+    #
+    # @raise [InvalidBearingError]
+    def check_bearing!(bearing)
+      raise InvalidBearingError.new(bearing) unless BEARINGS.key?(bearing)
     end
 
-    def find_direction(bearing, direction)
-      DIRECTIONS[bearing][direction]
+    # @param bearing [Symbol]
+    # @param direction [Symbol]
+    #
+    # @return [Symbol]
+    #
+    # @example
+    #   > find_new_bearing(:east, :right)
+    #   #=> :south
+    def find_new_bearing(bearing, direction)
+      BEARINGS[bearing][direction]
+    end
+
+    class InvalidBearingError < ArgumentError
+      def initialize(bearing)
+        super(":#{bearing} is not a valid bearing. Valid bearings: #{BEARINGS.keys}")
+      end
     end
   end
 end

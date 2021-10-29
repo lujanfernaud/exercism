@@ -19,9 +19,14 @@ class RobotTurningTest < Minitest::Test
 
   def test_invalid_robot_bearing
     # skip
-    assert_raises ArgumentError do
+    exception = assert_raises ArgumentError do
       robot.orient(:crood)
     end
+
+    assert_equal(
+      ":crood is not a valid bearing. Valid bearings: [:north, :east, :south, :west]",
+      exception.message
+    )
   end
 
   def test_turn_right_from_north
