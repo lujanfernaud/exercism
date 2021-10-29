@@ -37,8 +37,7 @@ class Robot
 
     # @param coordinates [Array<Integer>] Example: [0, 1]
     def coordinates=(coordinates)
-      @x = coordinates.first.to_i
-      @y = coordinates.last.to_i
+      @x, @y = coordinates.take(2).map(&:to_i)
     end
 
     # @param bearing [Symbol]
