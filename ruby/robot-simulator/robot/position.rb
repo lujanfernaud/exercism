@@ -21,7 +21,7 @@ class Robot
         right: :north,
         left: :south
       }
-    }.freeze
+    }
 
     # @param x [Integer]
     # @param y [Integer]

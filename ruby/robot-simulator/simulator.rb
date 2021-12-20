@@ -1,5 +1,5 @@
 class Simulator
-  INPUT_TO_INSTRUCTION = {
+  INSTRUCTION = {
     "L" => :turn_left,
     "R" => :turn_right,
     "A" => :advance
@@ -17,7 +17,7 @@ class Simulator
   #   > instructions("RALAL")
   #   #=> [:turn_right, :advance, :turn_left, :advance, :turn_left]
   def instructions(incoming_instructions)
-    incoming_instructions.chars.map(&INPUT_TO_INSTRUCTION)
+    incoming_instructions.chars.map(&INSTRUCTION)
   end
 
   # @param robot [Robot]
