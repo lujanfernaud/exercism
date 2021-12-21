@@ -10,7 +10,7 @@ class Robot
 
   attr_reader :bearing
 
-  # It sets the bearing if it's valid.
+  # Set the bearing if it's valid.
   #
   # @param bearing [Symbol] Example: :north
   #
@@ -33,7 +33,7 @@ class Robot
     @bearing = turn(:left)
   end
 
-  # It places the robot at the specified coordinates.
+  # Place the robot at the specified coordinates.
   #
   # @param coordinates [Array<Integer>] Example: [0, 1]
   #

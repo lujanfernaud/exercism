@@ -15,6 +15,8 @@ class Simulator
     instructions(incoming_instructions).each(&robot.method(:send))
   end
 
+  # Translate the incoming instructions.
+  #
   # @param incoming_instructions [String] Example: "RALAL"
   #
   # @return [Array<Symbol>] Translated instructions.
