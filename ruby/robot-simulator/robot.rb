@@ -1,14 +1,14 @@
 require_relative "robot/position"
 
 class Robot
-  attr_reader :bearing
-
   # @param bearing [Symbol]
   # @param position [Position]
   def initialize(bearing: :north, position: Position.new)
     @bearing = bearing
     @position = position
   end
+
+  attr_reader :bearing
 
   # @param bearing [Symbol]
   #
