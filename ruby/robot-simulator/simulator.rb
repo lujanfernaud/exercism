@@ -5,7 +5,7 @@ class Simulator
     "A" => :advance
   }.freeze
 
-  # Apply the incoming instructions.
+  # Move the robot according to the incoming instructions.
   #
   # @param robot [Robot]
   # @param incoming_instructions [String] Example: "RALAL"
