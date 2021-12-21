@@ -5,13 +5,19 @@ class Simulator
     "A" => :advance
   }.freeze
 
+  # Apply the incoming instructions.
+  #
   # @param robot [Robot]
   # @param incoming_instructions [String] Example: "RALAL"
+  #
+  # @return [Array<Symbol>] Translated instructions that were applied.
   def evaluate(robot, incoming_instructions)
     instructions(incoming_instructions).each(&robot.method(:send))
   end
 
   # @param incoming_instructions [String] Example: "RALAL"
+  #
+  # @return [Array<Symbol>] Translated instructions.
   #
   # @example
   #   > instructions("RALAL")
@@ -23,7 +29,9 @@ class Simulator
   # @param robot [Robot]
   # @param x [Integer]
   # @param y [Integer]
-  # @param direction [Symbol]
+  # @param direction [Symbol] Example: :right
+  #
+  # @return [Symbol] New bearing. Example: :east
   def place(robot, x:, y:, direction:)
     robot.at(x, y)
     robot.orient(direction)

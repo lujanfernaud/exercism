@@ -36,28 +36,32 @@ class Robot
     end
 
     # @param coordinates [Array<Integer>] Example: [0, 1]
+    #
+    # @return [Array<Integer>] Coordinates.
     def coordinates=(coordinates)
       @x, @y = coordinates.take(2).map(&:to_i)
     end
 
-    # @param bearing [Symbol]
+    # @param bearing [Symbol] Example: :north
+    #
+    # @return [Array<Integer>] New coordinates. Example: [0, 2]
     def move(bearing)
       move = BEARINGS[bearing][:move]
 
       self.coordinates = coordinates.zip(move).map(&:sum)
     end
 
-    # @param bearing [Symbol]
+    # @param bearing [Symbol] Example: :north
     #
     # @raise [InvalidBearingError]
     def check_bearing!(bearing)
       raise InvalidBearingError.new(bearing) unless BEARINGS.key?(bearing)
     end
 
-    # @param bearing [Symbol]
-    # @param direction [Symbol]
+    # @param bearing [Symbol] Example: :east
+    # @param direction [Symbol] Example: :right
     #
-    # @return [Symbol]
+    # @return [Symbol] New bearing.
     #
     # @example
     #   > find_new_bearing(:east, :right)
@@ -67,6 +71,7 @@ class Robot
     end
 
     class InvalidBearingError < ArgumentError
+      # @param bearing [Symbol]
       def initialize(bearing)
         super(":#{bearing} is not a valid bearing. Valid bearings: #{BEARINGS.keys}")
       end
