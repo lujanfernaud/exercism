@@ -26,8 +26,8 @@ class Robot
     # @param x [Integer]
     # @param y [Integer]
     def initialize(x: 0, y: 0)
-      @x = x.to_i
-      @y = y.to_i
+      @x = Integer(x)
+      @y = Integer(y)
     end
 
     # @return [Array<Integer>] Example: [0, 1]
