@@ -12,9 +12,5 @@ const COLOR_TO_VALUE: Record<string, number> = {
 }
 
 export function decodedValue(colors: Array<string>): number {
-  let result: string = ""
-
-  colors.slice(0, 2).forEach((color: string) => { result += COLOR_TO_VALUE[color] })
-
-  return Number(result)
+  return Number(`${COLOR_TO_VALUE[colors[0]]}${COLOR_TO_VALUE[colors[1]]}`)
 }
