@@ -12,5 +12,9 @@ const COLOR_TO_VALUE: Record<string, number> = {
 }
 
 export function decodedValue(colors: Array<string>): number {
-  return Number(`${COLOR_TO_VALUE[colors[0]]}${COLOR_TO_VALUE[colors[1]]}`)
+  const result = colors.splice(0, 2).reduce((result: string, color: string): string => {
+    return result + COLOR_TO_VALUE[color]
+  }, "")
+
+  return Number(result)
 }
