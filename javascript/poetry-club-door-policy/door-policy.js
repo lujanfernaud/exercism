@@ -1,6 +1,5 @@
 // @ts-check
 
-
 /**
  * Respond with the correct character, given the line of the
  * poem, if this were said at the front door.
