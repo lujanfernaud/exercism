@@ -60,6 +60,7 @@ export function canFreePrisoner(
 
   if (archerIsAwake && petDogIsPresent) { return false }
   if (archerIsAwake && !petDogIsPresent) { return false }
-  if (knightIsAwake && !petDogIsPresent) { return false  }
+
   if (knightIsAwake && petDogIsPresent) { return true  }
+  if (knightIsAwake && !petDogIsPresent) { return false  }
 }
