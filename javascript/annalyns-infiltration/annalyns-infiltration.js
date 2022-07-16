@@ -54,13 +54,5 @@ export function canFreePrisoner(
 ) {
   const kidnappersAreAsleep = !knightIsAwake && !archerIsAwake
 
-  if (kidnappersAreAsleep && prisonerIsAwake && !petDogIsPresent) { return true }
-  if (kidnappersAreAsleep && petDogIsPresent) { return true }
-  if (kidnappersAreAsleep && !petDogIsPresent) { return false }
-
-  if (archerIsAwake && petDogIsPresent) { return false }
-  if (archerIsAwake && !petDogIsPresent) { return false }
-
-  if (knightIsAwake && petDogIsPresent) { return true  }
-  if (knightIsAwake && !petDogIsPresent) { return false  }
+  return (kidnappersAreAsleep && prisonerIsAwake) || (!archerIsAwake && petDogIsPresent)
 }
