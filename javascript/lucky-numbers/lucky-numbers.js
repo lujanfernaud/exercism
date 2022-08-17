@@ -32,7 +32,7 @@ export function luckyNumber(value) {
  */
 export function errorMessage(input) {
   if (!input) return 'Required field'
-  if (Object.is(NaN, Number(input)) || Number(input) === 0) return 'Must be a number besides 0'
+  if (!Number(input) || Number(input) === 0) return 'Must be a number besides 0'
 
   return ''
 }
