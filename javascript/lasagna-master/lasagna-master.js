@@ -37,15 +37,10 @@ const QUANTITIES_PER_LAYER = {
  * @returns {Record<string, number>}
  */
 export function quantities(layers) {
-  let quantities = { noodles: 0, sauce: 0 }
-
-  for(let i = 0; i < layers.length; i++) {
-    let layer = layers[i]
-
-    if (layer === 'noodles' || layer === 'sauce') quantities[layer] += QUANTITIES_PER_LAYER[layer]
+  return {
+    noodles: layers.filter(layer => layer === 'noodles').length * QUANTITIES_PER_LAYER['noodles'],
+    sauce: layers.filter(layer => layer === 'sauce').length * QUANTITIES_PER_LAYER['sauce'],
   }
-
-  return quantities
 }
 
 /**
