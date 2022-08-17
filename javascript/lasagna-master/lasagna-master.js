@@ -69,18 +69,11 @@ const DEFAULT_PORTIONS = 2
  * @returns {Record<string, number>}
  */
 export function scaleRecipe(recipeForTwoPortions, portions) {
-  if (portions === DEFAULT_PORTIONS) return recipeForTwoPortions
-
   let scaledRecipe = { ...recipeForTwoPortions }
 
   for(let ingredient in scaledRecipe) {
-    if (portions === 1) {
-      scaledRecipe[ingredient] = scaledRecipe[ingredient] / DEFAULT_PORTIONS
-    }
-
-    if (portions > 1) {
-      scaledRecipe[ingredient] = scaledRecipe[ingredient] * (portions / 2)
-    }
+    if (portions === 1) scaledRecipe[ingredient] /= DEFAULT_PORTIONS
+    if (portions > 1) scaledRecipe[ingredient] *= portions / DEFAULT_PORTIONS
   }
 
   return scaledRecipe
