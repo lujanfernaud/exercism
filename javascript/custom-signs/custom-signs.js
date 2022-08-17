@@ -22,7 +22,9 @@ export function buildSign(occasion, name) {
  */
 
 export function buildBirthdaySign(age) {
-  return `Happy Birthday! What a ${age >= 50 ? 'mature' : 'young'} fellow you are.`
+  let signifier = age >= 50 ? 'mature' : 'young'
+
+  return `Happy Birthday! What a ${signifier} fellow you are.`
 }
 
 /**
