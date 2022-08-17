@@ -21,8 +21,10 @@ export function buildSign(occasion, name) {
  * @returns {string} template string based on age
  */
 
+const AGE_THRESHOLD = 50
+
 export function buildBirthdaySign(age) {
-  let signifier = age >= 50 ? 'mature' : 'young'
+  let signifier = age >= AGE_THRESHOLD ? 'mature' : 'young'
 
   return `Happy Birthday! What a ${signifier} fellow you are.`
 }
@@ -41,7 +43,7 @@ export function graduationFor(name, year) {
 }
 
 const SIGN_BASE_PRICE_IN_DOLLARS = 20
-const LETTER_COST_IN_DOLLARS = 2
+const CHARACTER_COST_IN_DOLLARS = 2
 
 /**
  * Determine cost based on each character of sign parameter that builds
@@ -54,7 +56,7 @@ const LETTER_COST_IN_DOLLARS = 2
  */
 
 export function costOf(sign, currency) {
-  let signCost = SIGN_BASE_PRICE_IN_DOLLARS + (sign.length * LETTER_COST_IN_DOLLARS)
+  let signCost = SIGN_BASE_PRICE_IN_DOLLARS + (sign.length * CHARACTER_COST_IN_DOLLARS)
 
   return `Your sign costs ${signCost.toFixed(2)} ${currency}.`
 }
