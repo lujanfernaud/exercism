@@ -10,11 +10,7 @@
  * @returns {Visitor} the visitor that was created
  */
 export function createVisitor(name, age, ticketId) {
-  return {
-    name: name,
-    age: age,
-    ticketId: ticketId,
-  }
+  return { name, age, ticketId }
 }
 
 /**
@@ -37,12 +33,15 @@ export function revokeTicket(visitor) {
  * @returns {string} ticket status
  */
 export function ticketStatus(tickets, ticketId) {
-  if (tickets[ticketId] === null) {
-    return 'not sold'
-  } else if (tickets[ticketId] === undefined) {
-    return 'unknown ticket id'
-  } else {
-    return `sold to ${tickets[ticketId]}`
+  switch(tickets[ticketId]) {
+    case null:
+      return 'not sold'
+      break;
+    case undefined:
+      return 'unknown ticket id'
+      break;
+    default:
+      return `sold to ${tickets[ticketId]}`
   }
 }
 
