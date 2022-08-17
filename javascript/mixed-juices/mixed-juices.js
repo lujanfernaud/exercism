@@ -59,18 +59,11 @@ function wedgesForLimeSize(limeSize) {
  * @returns {number} number of limes cut
  */
 export function limesToCut(wedgesNeeded, limes) {
-  if (wedgesNeeded === 0) return 0
-
   let limesUsedCount = 0
-  let wedgesCount = 0
 
-  while(limes.length > 0) {
-    let currentLimeWedges = wedgesForLimeSize(limes.shift())
-
-    wedgesCount += currentLimeWedges
-    limesUsedCount += 1
-
-    if (wedgesCount >= wedgesNeeded) break
+  while(wedgesNeeded > 0 && limes.length > 0) {
+    limesUsedCount++
+    wedgesNeeded -= wedgesForLimeSize(limes.shift())
   }
 
   return limesUsedCount
@@ -84,14 +77,8 @@ export function limesToCut(wedgesNeeded, limes) {
  * @returns {string[]} remaining orders after the time is up
  */
 export function remainingOrders(timeLeft, orders) {
-  let remainingOrdersMinutes = 0
-
-  while(orders.length > 0) {
-    let currentOrderMinutes = timeToMixJuice(orders.shift())
-
-    remainingOrdersMinutes += currentOrderMinutes
-
-    if (remainingOrdersMinutes >= timeLeft) break
+  while(timeLeft > 0) {
+    timeLeft -= timeToMixJuice(orders.shift())
   }
 
   return orders
