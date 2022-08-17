@@ -54,5 +54,5 @@ const LETTER_COST_IN_DOLLARS = 2
 export function costOf(sign, currency) {
   let signCost = SIGN_BASE_PRICE_IN_DOLLARS + (sign.length * LETTER_COST_IN_DOLLARS)
 
-  return `Your sign costs ${signCost}.00 ${currency}.`
+  return `Your sign costs ${signCost.toFixed(2)} ${currency}.`
 }
