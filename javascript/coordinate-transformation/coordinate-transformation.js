@@ -65,9 +65,7 @@ export function memoizeTransform(f) {
   let cache = {}
 
   const memoize = (x, y) => {
-    const cachedResult = cache.argX === x && cache.argY === y ? cache : null
-
-    if (cachedResult !== null) { return cache.result }
+    if (cache.argX === x && cache.argY === y) { return cache.result }
 
     const result = f(x, y)
 
