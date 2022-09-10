@@ -62,18 +62,14 @@ export function composeTransform(f, g) {
  *  if the arguments are the same on subsequent calls, or compute a new result if they are different.
  */
 export function memoizeTransform(f) {
-  let cache = {}
+  let previousX, previousY, previousResult
 
   const memoize = (x, y) => {
-    if (cache.argX === x && cache.argY === y) { return cache.result }
+    if (previousX === x && previousY === y) { return previousResult }
 
-    const result = f(x, y)
-
-    cache.argX = x
-    cache.argY = y
-    cache.result = result
-
-    return result
+    previousX = x
+    previousY = y
+    return previousResult = f(x, y)
   }
 
   return memoize
